@@ -168,7 +168,6 @@
    * @param newPageNumber {number}
    */
   function handlePaginationChange(newPageNumber: number) {
-    console.log('handlePaginationChange', newPageNumber);
     queryParameters.value.pageId = newPageNumber.toString();
   }
 
@@ -179,7 +178,6 @@
    * @param querySortSearch
    */
   function handleSortResults(querySortSearch: SearchSortFilters) {
-    console.log('handleSortResults', querySortSearch);
     resetPagination();
 
     // We can clean this up and use `queryParameters` as our main source of truth
