@@ -4,4 +4,5 @@ pre-commit:
     lint-staged:
       run: npx lint-staged
     test:
-      run: npx vitest run --reporter=verbose
+      run: pnpm test:ci -- --silent --reporter=verbose
+
