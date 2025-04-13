@@ -17,11 +17,12 @@
     defineProps<{
       title: string;
       type?: 'error' | 'info' | 'warning';
-      // eslint-disable-next-line vue/require-default-prop
+
       text?: string;
     }>(),
     {
       type: 'info',
+      text: 'adding default',
     },
   );
 </script>
