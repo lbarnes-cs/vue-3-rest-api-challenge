@@ -8,7 +8,7 @@
     variant="outlined"
     hide-details
     @click:append-inner="handleAppendClick"
-    @update:modelValue="debouncedEmit"
+    @blur="emit('update:modelValue', localSearchKey)"
   />
 </template>
 
@@ -18,53 +18,41 @@ import { useDebounceFn } from '@vueuse/core';
 
 const props = defineProps<{
   isFetching: boolean;
+  modelValue: string;
 }>();
 
 const emit = defineEmits<{
   (event: 'update:modelValue', value: string): void;
 }>();
 
-const localSearchKey = ref('');
-const isClickTriggered = ref(false); // Track if click was triggered
+// Local state initialized from the modelValue prop
+const localSearchKey = ref(props.modelValue);
 
-/**
- * TODO:
- * The user experience here is messy and needs to be improved.
- * In an effort to use debounced, ensuring we don't send API requests for every
- * key-change on the input; we have an issue where the value doesn't get saved correctly.
- *
- * Might look into using a computed function with getter and setter to better manage this
- * For the challenge, this is low on the priority list.
- */
-// Debounced function to emit the search term
+// Keep local in sync with external changes (if needed)
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    if (newVal !== localSearchKey.value) {
+      localSearchKey.value = newVal;
+    }
+  },
+);
+
+// Debounced emit to parent
 const debouncedEmit = useDebounceFn((value: string) => {
-  // Ensure we don't emit twice if the user already press the search icon
-  if (!props.isFetching && !isClickTriggered.value) {
+  if (!props.isFetching) {
     emit('update:modelValue', value);
   }
-}, 500);
+}, 600);
 
-// Watch for changes in the search field and trigger debounced emit
-// const watchLocalSearchKey = (newVal: string) => {
-//   debouncedEmit(newVal);
-// };
+// Watch input value and debounce the update
+watch(localSearchKey, (newVal) => {
+  debouncedEmit(newVal);
+});
 
-// watch(localSearchKey, watchLocalSearchKey);
-
+// Immediate emit when clicking search
 const handleAppendClick = () => {
-  // Emit the latest value when the append-inner area is clicked
-  // Stop a user from calling the API mulitple times
-  if (!props.isFetching && !isClickTriggered.value) {
-    debouncedEmit(localSearchKey.value);
-  }
-
-  // Set flag to prevent debounced emit from being triggered
-  isClickTriggered.value = true;
-
-  // Reset flag after a small delay (after debounce timeout)
-  setTimeout(() => {
-    isClickTriggered.value = false;
-  }, 600); // Slightly longer than the debounce delay to avoid conflict
+  emit('update:modelValue', localSearchKey.value);
 };
 </script>
 
