@@ -13,7 +13,7 @@ describe('AlertBanner', () => {
       },
     });
 
-    expect(wrapper.get('[data-testid="alert-banner"]').exists()).toBe(true);
+    expect(wrapper.get('[data-testid="alert-banner"]')).toBeTruthy();
     expect(wrapper.get('.v-alert-title').text()).toBe('Test Title');
     expect(wrapper.get('[data-testid="alert-banner-text"]').text()).toContain(
       'This is default fallback text.',
