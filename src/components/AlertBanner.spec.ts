@@ -57,4 +57,38 @@ describe('AlertBanner', () => {
       '<code>Some error details.</code>',
     );
   });
+
+  it('renders the error background class', () => {
+    const wrapper = mountWithVuetify(AlertBanner, {
+      props: {
+        title: 'Error Title',
+        type: 'error',
+      },
+    });
+
+    // Test for the correct class based on 'error' type
+    expect(wrapper.classes()).toContain('bg-error');
+  });
+
+  it('renders the info background class', () => {
+    const wrapper = mountWithVuetify(AlertBanner, {
+      props: {
+        title: 'Info Title',
+        type: 'info',
+      },
+    });
+
+    expect(wrapper.classes()).toContain('bg-info');
+  });
+
+  it('renders default prop for type, should be "info"', () => {
+    const wrapper = mountWithVuetify(AlertBanner, {
+      props: {
+        title: 'Info Title',
+      },
+    });
+
+    // Cast wrapper.props() to the expected type to avoid TypeScript error
+    expect((wrapper.props() as { type: string }).type).toBe('info');
+  });
 });

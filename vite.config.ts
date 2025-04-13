@@ -1,3 +1,4 @@
+// vite.config.ts
 import { defineConfig } from 'vitest/config';
 import vue from '@vitejs/plugin-vue';
 import path from 'path';
@@ -20,6 +21,11 @@ export default defineConfig({
       provider: 'v8',
     },
     include: ['tests/**/*.spec.ts', 'src/**/*.spec.ts'],
-    css: true,
+    css: false,
+    server: {
+      deps: {
+        inline: ['vuetify'],
+      },
+    },
   },
 });

@@ -7,9 +7,9 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"],
+      "@/*": ["src/*"],
       "@tests/*": ["tests/*"]
     },
     "types": ["vitest/globals", "@vue/test-utils", "node"]

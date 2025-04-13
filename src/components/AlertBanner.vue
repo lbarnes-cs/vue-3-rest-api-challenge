@@ -13,9 +13,14 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
-  title: string;
-  type: 'error' | 'info' | 'warning';
-  text?: string;
-}>();
+withDefaults(
+  defineProps<{
+    title: string;
+    type?: 'error' | 'info' | 'warning';
+    text?: string;
+  }>(),
+  {
+    type: 'info',
+  },
+);
 </script>
