@@ -24,7 +24,7 @@ type Material = {
   type: string;
   mutability: string;
   data: {
-    [key: string]: any; // This could be typed further if you know the expected data structure
+    [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
   };
 };
 

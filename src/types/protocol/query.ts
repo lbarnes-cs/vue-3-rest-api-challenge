@@ -1,5 +1,4 @@
 // https://apidocs.protocols.io/#get-list
-
 export enum OrderField {
   Activity = 'activity',
   Relevance = 'relevance',

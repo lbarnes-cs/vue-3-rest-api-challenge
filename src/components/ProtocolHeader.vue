@@ -19,5 +19,9 @@
 </template>
 
 <script setup lang="ts">
-import BtnTooltip from '@/components/BtnTooltip.vue';
+  import BtnTooltip from '@/components/BtnTooltip.vue';
+
+  defineEmits<{
+    (e: 'refresh'): void;
+  }>();
 </script>

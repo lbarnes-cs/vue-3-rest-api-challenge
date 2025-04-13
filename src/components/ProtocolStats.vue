@@ -35,22 +35,22 @@
 </template>
 
 <script setup lang="ts">
-import { formatNumber } from '@/utils/formatNumber';
-import type { ProtocolStats } from '@/types/protocol';
+  import { formatNumber } from '@/utils/formatNumber';
+  import type { ProtocolStats } from '@/types/protocol';
 
-const props = defineProps<{
-  stats: Partial<ProtocolStats>;
-}>();
+  const props = defineProps<{
+    stats: Partial<ProtocolStats>;
+  }>();
 
-const { stats } = props;
+  const { stats } = props;
 </script>
 
 <style lang="scss" scoped>
-.list-none {
-  list-style-type: none;
-}
+  .list-none {
+    list-style-type: none;
+  }
 
-ul li {
-  color: var(--v-grey-lighten1);
-}
+  ul li {
+    color: var(--v-grey-lighten1);
+  }
 </style>

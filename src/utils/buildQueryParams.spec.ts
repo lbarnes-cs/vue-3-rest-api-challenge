@@ -1,4 +1,8 @@
-import type { ProtocolsQuery } from '@/types/protocol/query';
+import {
+  OrderDir,
+  OrderField,
+  type ProtocolsQuery,
+} from '@/types/protocol/query';
 import { buildQueryParams } from './buildQueryParams';
 
 describe('buildQueryParams', () => {
@@ -12,8 +16,8 @@ describe('buildQueryParams', () => {
     expect(
       buildQueryParams({
         searchKey: 'australia',
-        orderField: 'date',
-        orderDir: 'asc',
+        orderField: OrderField.Date,
+        orderDir: OrderDir.Asc,
       }),
     ).toBe('filter=public&key=australia&order_field=date&order_dir=asc');
   });

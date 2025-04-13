@@ -7,12 +7,22 @@
       class="flex-0-1"
       cover
     >
-      <template v-slot:error>
-        <v-img :src="require('/assets/img/placeholder/image-placeholder.jpg')">
+      <template #error>
+        <v-img
+          :src="
+            new URL(
+              '/assets/img/placeholder/image-placeholder.jpg',
+              import.meta.url,
+            ).href
+          "
+        >
           <template #sources>
             <source
               :srcset="
-                require('/assets/img/placeholder/image-placeholder.webp')
+                new URL(
+                  '/assets/img/placeholder/image-placeholder.webp',
+                  import.meta.url,
+                ).href
               "
             />
           </template>
@@ -24,7 +34,8 @@
       {{ datePublished }}
     </v-card-subtitle>
 
-    <v-card-title v-html="sanitizedTitleHtml" class="pt-0"></v-card-title>
+    <!-- eslint-disable-next-line vue/no-v-html -->
+    <v-card-title class="pt-0" v-html="sanitizedTitleHtml" />
 
     <v-card-subtitle class="d-flex">
       {{ protocol?.creator.name }}
@@ -66,43 +77,45 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
+  import { computed } from 'vue';
+  import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
 
-import ProtocolStats from '@/components/ProtocolStats.vue';
+  import ProtocolStats from '@/components/ProtocolStats.vue';
 
-import type { Protocol } from '@/types/protocol';
+  import type { Protocol } from '@/types/protocol';
 
-const props = defineProps<{
-  protocol: Protocol;
-}>();
+  const props = defineProps<{
+    protocol: Protocol;
+  }>();
 
-const { sanitize } = useSanitizeHtml();
+  const { sanitize } = useSanitizeHtml();
 
-const sanitizedTitleHtml = computed(() => sanitize(props.protocol?.title_html));
+  const sanitizedTitleHtml = computed(() =>
+    sanitize(props.protocol?.title_html),
+  );
 
-const datePublished = computed(() => {
-  if (!props.protocol.published_on) return false;
+  const datePublished = computed(() => {
+    if (!props.protocol.published_on) return false;
 
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  };
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    };
 
-  const date = new Date(props.protocol.published_on * 1000); // Convert seconds to milliseconds
-  return date.toLocaleDateString('en-US', options);
-});
+    const date = new Date(props.protocol.published_on * 1000); // Convert seconds to milliseconds
+    return date.toLocaleDateString('en-US', options);
+  });
 </script>
 
 <style lang="scss" scoped>
-.protocolCard {
-  ::v-deep(.v-card-title) {
-    white-space: normal;
-    display: -webkit-box;
-    line-clamp: 3;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
+  .protocolCard {
+    ::v-deep(.v-card-title) {
+      white-space: normal;
+      display: -webkit-box;
+      line-clamp: 3;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+    }
   }
-}
 </style>

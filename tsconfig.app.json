@@ -12,7 +12,8 @@
       "@/*": ["src/*"],
       "@tests/*": ["tests/*"]
     },
-    "types": ["vitest/globals", "@vue/test-utils", "node"]
+    "types": ["vitest/globals", "@vue/test-utils", "node"],
+    "jsx": "preserve"
   },
   "include": [
     "src/**/*.ts",

@@ -2,7 +2,13 @@
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll": true
+    "source.fixAll.eslint": "always",
+    "source.fixAll.stylelint": "always"
   },
-  "eslint.validate": ["vue", "typescript"]
+  "eslint.validate": ["vue", "javascript", "typescript"],
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  }
 }

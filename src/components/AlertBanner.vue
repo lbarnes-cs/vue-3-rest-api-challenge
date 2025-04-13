@@ -13,14 +13,15 @@
 </template>
 
 <script setup lang="ts">
-withDefaults(
-  defineProps<{
-    title: string;
-    type?: 'error' | 'info' | 'warning';
-    text?: string;
-  }>(),
-  {
-    type: 'info',
-  },
-);
+  withDefaults(
+    defineProps<{
+      title: string;
+      type?: 'error' | 'info' | 'warning';
+      // eslint-disable-next-line vue/require-default-prop
+      text?: string;
+    }>(),
+    {
+      type: 'info',
+    },
+  );
 </script>
