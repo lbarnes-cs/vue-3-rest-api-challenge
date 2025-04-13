@@ -4,10 +4,6 @@ const { sanitize } = useSanitizeHtml();
 
 describe('useSanitizeHtml', () => {
   // ✅ Allowed content
-  it('should allow <p> tag', () => {
-    expect(sanitize('<p>This is allowed</p>')).toBe('<p>This is allowed</p>');
-  });
-
   it('should allow <b>, <i>, <em>, <strong>, <span> tags', () => {
     const dirty =
       '<b>Bold</b> <i>Italic</i> <em>Emphasized</em> <strong>Strong</strong> <span>Span</span>';
@@ -15,11 +11,21 @@ describe('useSanitizeHtml', () => {
   });
 
   it('should allow nested allowed tags', () => {
-    const dirty = '<p><strong>Bold in paragraph</strong></p>';
+    const dirty = '<strong><span>Nested tags</span></strong>';
     expect(sanitize(dirty)).toBe(dirty);
   });
 
   // ❌ Disallowed or dangerous content
+  it('should remove <p> tags but keep their content', () => {
+    expect(sanitize('<p>This is a paragraph</p>')).toBe('This is a paragraph');
+    expect(sanitize('<p><strong>Bold in paragraph</strong></p>')).toBe(
+      '<strong>Bold in paragraph</strong>',
+    );
+    expect(sanitize('<p><em><span>Deeply nested</span></em></p>')).toBe(
+      '<em><span>Deeply nested</span></em>',
+    );
+  });
+
   it('should remove <script> tags', () => {
     expect(sanitize('<script>alert("XSS")</script>')).toBe('');
   });
@@ -62,11 +68,13 @@ describe('useSanitizeHtml', () => {
 
   // 🤯 Malformed or unclosed HTML
   it('should handle unclosed tags and close them safely', () => {
-    expect(sanitize('<p><strong>Oops')).toBe('<p><strong>Oops</strong></p>');
+    expect(sanitize('<strong><span>Oops')).toBe(
+      '<strong><span>Oops</span></strong>',
+    );
   });
 
   it('should handle malformed nested HTML', () => {
-    expect(sanitize('<p><em>Broken')).toBe('<p><em>Broken</em></p>');
+    expect(sanitize('<em><i>Broken')).toBe('<em><i>Broken</i></em>');
   });
 
   it('should handle random broken tags', () => {
