@@ -4,4 +4,4 @@ pre-commit:
     lint-staged:
       run: npx lint-staged
     test:
-      run: pnpm test -- --reporter=verbose {staged_files}
+      run: pnpm test -- --reporter=verbose
