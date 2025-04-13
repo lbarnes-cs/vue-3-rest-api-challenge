@@ -10,5 +10,6 @@
     "other": true,
     "comments": false,
     "strings": true
-  }
+  },
+  "files.insertFinalNewline": true // Add this line to ensure final newline on save
 }

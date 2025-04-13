@@ -6,7 +6,14 @@ import tseslint from 'typescript-eslint';
 
 export default [
   { files: ['**/*.{js,mjs,cjs,ts,vue}'] },
-  { ignores: ['**/node_modules/**', 'dist/'] },
+  {
+    ignores: [
+      '**/node_modules/**',
+      'dist/',
+      'pnpm-lock.yaml',
+      'package-lock.json',
+    ],
+  },
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
@@ -29,6 +36,7 @@ export default [
           allowTernary: true,
         },
       ],
+      'eol-last': ['error', 'always'],
     },
   },
 ];

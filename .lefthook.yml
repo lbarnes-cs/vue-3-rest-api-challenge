@@ -1,6 +1,7 @@
 pre-commit:
+  parallel: true
   commands:
-    prettier:
-      run: 'npx prettier --write .'
-    eslint:
-      run: 'npx eslint --fix .'
+    lint-staged:
+      run: npx lint-staged
+    test:
+      run: pnpm test -- --reporter=verbose {staged_files}

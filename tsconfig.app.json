@@ -22,6 +22,7 @@
     "tests/**/*.ts",
     "tests/**/*.tsx",
     "tests/**/*.vue",
-    "tests/types.d.ts"
+    "tests/types.d.ts",
+    "vite.d.ts"
   ]
 }
