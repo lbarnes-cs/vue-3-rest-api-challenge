@@ -5,6 +5,7 @@ import { buildQueryParams } from '@/utils/buildQueryParams';
 import type { ProtocolsResponse } from '@/types/protocol/response';
 import type { ProtocolsQuery } from '@/types/protocol/query';
 import { computed, type Ref } from 'vue';
+import type { Pagination } from '@/types/pagination';
 
 const API_BASE = 'https://www.protocols.io/api/v3';
 const TOKEN = import.meta.env.VITE_PROTOCOLS_TOKEN;
@@ -62,11 +63,14 @@ const fetchProtocols = async (
         return {
           items: [], // Empty array as fallback for canceled request
           pagination: {
-            total: 0, // Default value for total
-            total_pages: 0, // Default value for total_pages
-            page_size: 0, // Default value for page_size
-            page_id: '0', // Default value for page_id
-          },
+            current_page: 0,
+            total_pages: 0,
+            total_results: 0,
+            page_size: 0,
+            first: 0,
+            last: 0,
+            changed_on: 0,
+          } as Pagination,
           status_code: 200, // Or any default status code if needed
           total: 0, // Ensure total is included
           total_pages: 0, // Ensure total_pages is included
