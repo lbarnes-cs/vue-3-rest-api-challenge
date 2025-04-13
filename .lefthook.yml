@@ -1,0 +1,6 @@
+pre-commit:
+  commands:
+    prettier:
+      run: 'npx prettier --write .'
+    eslint:
+      run: 'npx eslint --fix .'

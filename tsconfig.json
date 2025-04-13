@@ -1,0 +1,20 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  "compilerOptions": {
+    "types": ["node", "vite-plugin-vuetify"],
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"],
+      "vuetify/*": ["node_modules/vuetify/lib/*"]
+    },
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "resolveJsonModule": true
+  }
+}
