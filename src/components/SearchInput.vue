@@ -1,7 +1,7 @@
 <template>
   <v-text-field
     v-model="localSearchKey"
-    :loading="isFetching"
+    :loading="isLoading"
     label="Search Protocols"
     append-inner-icon="mdi-magnify"
     density="compact"
@@ -17,7 +17,7 @@
   import { useDebounceFn } from '@vueuse/core';
 
   const props = defineProps<{
-    isFetching: boolean;
+    isLoading: boolean;
     modelValue: string;
   }>();
 
@@ -40,7 +40,7 @@
 
   // Debounced emit to parent
   const debouncedEmit = useDebounceFn((value: string) => {
-    if (!props.isFetching) {
+    if (!props.isLoading) {
       emit('update:modelValue', value);
     }
   }, 600);

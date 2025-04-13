@@ -1,30 +1,16 @@
 <template>
   <v-card class="protocolCard d-flex flex-column" variant="tonal">
     <v-img
-      :lazy-src="protocol.image.source || ''"
-      :src="protocol.image.placeholder || ''"
+      :lazy-src="protocol.image.source || placeholderImageWebp"
+      :src="protocol.image.placeholder || placeholderImageWebp"
       height="200"
       class="flex-0-1"
       cover
     >
       <template #error>
-        <v-img
-          :src="
-            new URL(
-              '/assets/img/placeholder/image-placeholder.jpg',
-              import.meta.url,
-            ).href
-          "
-        >
+        <v-img :src="placeholderImageJpg">
           <template #sources>
-            <source
-              :srcset="
-                new URL(
-                  '/assets/img/placeholder/image-placeholder.webp',
-                  import.meta.url,
-                ).href
-              "
-            />
+            <source :srcset="placeholderImageWebp" />
           </template>
         </v-img>
       </template>
@@ -84,6 +70,16 @@
 
   import type { Protocol } from '@/types/protocol';
 
+  const placeholderImageJpg = new URL(
+    '/assets/img/placeholder/image-placeholder.jpg',
+    import.meta.url,
+  ).href;
+
+  const placeholderImageWebp = new URL(
+    '/assets/img/placeholder/image-placeholder.webp',
+    import.meta.url,
+  ).href;
+
   const props = defineProps<{
     protocol: Protocol;
   }>();
@@ -94,8 +90,9 @@
     sanitize(props.protocol?.title_html),
   );
 
+  // Note: we are using this twice, this might be a helper or composable
   const datePublished = computed(() => {
-    if (!props.protocol.published_on) return false;
+    if (!props.protocol.published_on) return null;
 
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',

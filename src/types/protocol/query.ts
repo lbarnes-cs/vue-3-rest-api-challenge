@@ -12,12 +12,18 @@ export enum OrderDir {
   Desc = 'desc',
 }
 
+export type SearchSortFilters = {
+  orderField: OrderField | null;
+  orderDir: OrderDir | null;
+  pageSize: number | null;
+};
+
 export type ProtocolsQuery = {
   filter?: 'public' | 'user_public' | 'user_private' | 'shared_with_user';
   searchKey: string;
-  orderField?: OrderField;
-  orderDir?: OrderDir;
-  pageSize?: string;
+  orderField?: OrderField | null;
+  orderDir?: OrderDir | null;
+  pageSize?: string | null;
   pageId?: string;
   // fields is another query parameter, but leaving it out for this version
 };

@@ -13,7 +13,7 @@
           <v-col cols="4" class="bg-primary d-flex align-center">
             <SearchInput
               v-model="queryParameters.searchKey"
-              :is-fetching="isFetching"
+              :is-loading="isLoading"
             />
           </v-col>
         </v-row>
@@ -22,15 +22,14 @@
 
     <v-main>
       <v-container>
-        {{ queryParameters }}
         <ProtocolHeader @refresh="refetch" />
 
         <!-- Tabs for selecting view: Cards or Table -->
 
-        <v-row v-if="isFetching || isError || hasEmptyState">
+        <v-row v-if="isLoading || isError || hasEmptyState">
           <v-col cols="12" class="">
             <!-- Loading State -->
-            <div v-if="isFetching" class="d-flex justify-center align-center">
+            <div v-if="isLoading" class="d-flex justify-center align-center">
               <v-progress-circular indeterminate class="mr-4" />
               Loading Data...
             </div>
@@ -76,37 +75,29 @@
           </v-col>
         </v-row>
 
-        <v-row>
-          <v-col cols="12" class="d-flex ga-2">
-            <v-select
-              v-model="selectedOrderField"
-              :items="orderFieldOptions"
-              label="Select Order Field"
-              clearable
-              @update:model-value="handleOrderFieldChange"
-            />
-
-            <v-select
-              v-model="selectedOrderDir"
-              :items="orderDirOptions"
-              label="Select Order Direction"
-              clearable
-              @update:model-value="handleOrderDirChange"
-            />
-          </v-col>
-        </v-row>
-
         <!-- Display returned items-->
         <ProtocolsResults
-          v-if="!isFetching && protocolData?.items.length"
+          v-if="!isLoading && protocolData?.items.length"
+          :is-fetching="isFetching"
           :pagination="protocolData?.pagination"
           :items="protocolData?.items"
           :tab="tab"
-          @update:tab="tab = $event"
+          :sort-filters="searchSortFilters"
           @update:pagination="handlePaginationChange"
+          @update:sort-results="handleSortResults"
+          @update:tab="tab = $event"
+          @update:show-dialog="isSortDialogVisible = $event"
         />
       </v-container>
     </v-main>
+
+    <SortQueryDialog
+      v-if="!isFetching && protocolData?.items.length"
+      :sort-filters="searchSortFilters"
+      :show-dialog="isSortDialogVisible"
+      @update:show-dialog="isSortDialogVisible = $event"
+      @update:sort-results="handleSortResults"
+    />
   </v-app>
 </template>
 
@@ -115,17 +106,17 @@
   import { useProtocols } from '@/composables/useProtocols';
 
   import AlertBanner from '@/components/AlertBanner.vue';
+  import SortQueryDialog from '@/components/SortQueryDialog.vue';
   import ProtocolHeader from '@/components/ProtocolHeader.vue';
-  import ProtocolsResults from './components/ProtocolsResults.vue';
+  import ProtocolsResults from './view/ProtocolsResults.vue';
   import SearchInput from '@/components/SearchInput.vue';
 
   import {
-    OrderDir,
-    OrderField,
     type ProtocolsQuery,
+    type SearchSortFilters,
   } from '@/types/protocol/query';
 
-  const tab = ref<'cards' | 'table'>('cards'); // Default to 'cards'
+  const tab = ref<'cards' | 'table'>('table'); // Default to 'cards'
 
   const queryParameters = ref<ProtocolsQuery>({
     searchKey: 'temp',
@@ -134,6 +125,7 @@
 
   const {
     data: protocolData,
+    isLoading,
     isFetching,
     isError,
     error,
@@ -144,18 +136,11 @@
     (): boolean => !isFetching.value && protocolData.value?.items.length === 0,
   );
 
-  const selectedOrderField = ref<OrderField | null>(null);
-  const selectedOrderDir = ref<OrderDir | null>(null);
-
-  const orderFieldOptions = Object.keys(OrderField).map((key) => ({
-    title: key.charAt(0).toUpperCase() + key.slice(1), // Capitalize the first letter of each enum key
-    value: OrderField[key as keyof typeof OrderField],
-  }));
-
-  const orderDirOptions = Object.keys(OrderDir).map((key) => ({
-    title: key.charAt(0).toUpperCase() + key.slice(1),
-    value: OrderDir[key as keyof typeof OrderDir],
-  }));
+  const searchSortFilters = ref<SearchSortFilters>({
+    orderField: null,
+    orderDir: null,
+    pageSize: null,
+  });
 
   // Watch for changes in searchKey and reset pageId to 1
   watch(
@@ -164,6 +149,8 @@
       resetPagination();
     },
   );
+
+  const isSortDialogVisible = ref(false);
 
   /**
    * Reset the pagination.
@@ -174,32 +161,33 @@
   }
   /**
    * Sets the pageId for the query parameters
-   * @param newPageNumber
+   *
+   * pageId is handled as a string acording to the API.
+   * But it might be safe to keep it as a number, something to consider for the future as clean up
+   *
+   * @param newPageNumber {number}
    */
-  function handlePaginationChange(newPageNumber: string) {
-    queryParameters.value.pageId = newPageNumber;
+  function handlePaginationChange(newPageNumber: number) {
+    console.log('handlePaginationChange', newPageNumber);
+    queryParameters.value.pageId = newPageNumber.toString();
   }
 
   /**
-   * Sets the orderField for the query parameters
+   * Sets the sort query parameters.
    * Also resets the pagination.
    *
-   * @param newOrderField
+   * @param querySortSearch
    */
-  function handleOrderFieldChange(newOrderField: OrderField) {
+  function handleSortResults(querySortSearch: SearchSortFilters) {
+    console.log('handleSortResults', querySortSearch);
     resetPagination();
-    queryParameters.value.orderField = newOrderField;
-  }
 
-  /**
-   * Sets the orderDir for the query parameters
-   * Also resets the pagination.
-   *
-   * @param newOrderField
-   */
-  function handleOrderDirChange(newOrderDir: OrderDir) {
-    resetPagination();
-    queryParameters.value.orderDir = newOrderDir;
+    // We can clean this up and use `queryParameters` as our main source of truth
+    searchSortFilters.value = { ...querySortSearch };
+
+    queryParameters.value.orderField = querySortSearch.orderField;
+    queryParameters.value.orderDir = querySortSearch.orderDir;
+    queryParameters.value.pageSize = querySortSearch.pageSize?.toString();
   }
 </script>
 
