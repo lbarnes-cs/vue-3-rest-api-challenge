@@ -1,5 +1,6 @@
 <template>
   <v-data-table-server
+    v-model:expanded="expanded"
     :headers="headers"
     item-key="id"
     :items="protocolsList"
@@ -9,70 +10,91 @@
     :items-per-page="pagination.page_size"
     :sort-by="sortBy"
     class="elevation-1"
+    show-expand
     @update:options="handleOptionsUpdate"
     @update:page="handlePageUpdate"
     @update:items-per-page="handleItemsPerPage"
   >
     <!-- Main Columns -->
-    <template #[`item.id`]="{ item }">
+    <template #[`item.id`]="{ item }: ProtocolItem">
       <span>{{ item.id }}</span>
     </template>
-    <template #[`item.name`]="{ item }">
+    <template #[`item.name`]="{ item }: ProtocolItem">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <span v-html="sanitizedTitleHtml(item.title_html)" />
     </template>
-    <template #[`item.title`]="{ item }">
-      <!-- eslint-disable-next-line vue/no-v-html -->
-      <span>{{ item.title_html }}</span>
-    </template>
-    <template #[`item.creator`]="{ item }">
+    <template #[`item.creator`]="{ item }: ProtocolItem">
       <span>{{ item.creator.name }}</span>
     </template>
-    <template #[`item.date`]="{ item }">
+    <template #[`item.date`]="{ item }: ProtocolItem">
       <span>{{ formatPublishedDate(item.published_on) }}</span>
     </template>
-    <template #[`item.peer_reviewed`]="{ item }">
+    <template #[`item.peer_reviewed`]="{ item }: ProtocolItem">
       <v-icon :color="item.peer_reviewed ? 'green' : 'red'">
         {{ item.peer_reviewed ? 'mdi-check-circle' : 'mdi-close-circle' }}
       </v-icon>
     </template>
+    <template #[`item.actions`]="{ item }: ProtocolItem">
+      <v-btn
+        :href="item.url"
+        target="_blank"
+        rel="noopener noreferrer"
+        variant="outlined"
+        size="small"
+      >
+        <v-icon class="mr-1">mdi-eye</v-icon>
+        View
+      </v-btn>
+    </template>
 
     <!-- Expandable Row -->
-    <template #expanded-item="{ item }">
-      <td :colspan="headers.length">
-        <v-row>
-          <v-col v-if="item.acknowledgements">
-            <strong>Acknowledgements:</strong>
-            <div>{{ item.acknowledgements }}</div>
-          </v-col>
-          <v-col v-if="item.guidelines">
-            <strong>Guidelines:</strong>
-            <div>{{ item.guidelines }}</div>
-          </v-col>
-          <v-col v-if="item.image?.source">
-            <strong>Image Source:</strong>
-            <div>{{ item.image.source }}</div>
-          </v-col>
-          <v-col v-if="item.link">
-            <strong>Link:</strong>
-            <a :href="item.link" target="_blank">{{ item.link }}</a>
-          </v-col>
-          <v-col v-if="item.stats">
-            <strong>Stats:</strong>
-            <div>{{ item.stats }}</div>
-          </v-col>
-        </v-row>
-      </td>
+    <template
+      #expanded-row="{
+        item,
+        columns,
+      }: {
+        item: Protocol;
+        columns: DataTableHeaderType[];
+      }"
+    >
+      <tr>
+        <td :colspan="columns.length" class="px-0">
+          <v-table class="w-100 bg-grey-lighten-5 border-b-lg">
+            <tbody>
+              <v-row>
+                <v-col v-if="item.acknowledgements">
+                  <strong>Acknowledgements:</strong>
+                  <div>{{ item.acknowledgements }}</div>
+                </v-col>
+                <v-col v-if="item.guidelines">
+                  <strong>Guidelines:</strong>
+                  <div>{{ item.guidelines }}</div>
+                </v-col>
+                <v-col v-if="item.image?.source">
+                  <strong>Image Source:</strong>
+                  <div>{{ item.image.source }}</div>
+                </v-col>
+                <v-col v-if="item.link">
+                  <strong>Link:</strong>
+                  <a :href="item.link" target="_blank">{{ item.link }}</a>
+                </v-col>
+                <v-col v-if="item.stats">
+                  <strong>Stats:</strong>
+                  <div>{{ item.stats }}</div>
+                </v-col>
+              </v-row>
+            </tbody>
+          </v-table>
+        </td>
+      </tr>
     </template>
   </v-data-table-server>
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue';
-
   import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
-
-  import type { Protocol } from '@/types/protocol'; // Adjust path as needed
+  import type { Protocol } from '@/types/protocol';
   import type { DataTableHeaderType } from '@/types/data-table.ts';
   import type { Pagination } from '@/types/pagination';
   import {
@@ -89,10 +111,12 @@
       key: string;
       order: 'asc' | 'desc';
     }[];
-    // Optionally: add filters or other features if needed
   }
 
-  // Define the props with TypeScript using `defineProps`
+  interface ProtocolItem {
+    item: Protocol;
+  }
+
   const props = defineProps<{
     protocolsList: Protocol[];
     pagination: Pagination;
@@ -107,20 +131,15 @@
 
   const { sanitize } = useSanitizeHtml();
 
-  // const expanded = ref<Protocol[]>([]);
+  // This keeps track of which rows are expanded
+  const expanded = ref<Protocol[]>([]);
 
   // Table headers definition
   const headers = ref<DataTableHeaderType[]>([
     { title: 'ID', align: 'start', key: 'id', sortable: true },
     { title: 'Title', align: 'start', key: 'name', sortable: true },
-    { title: 'Normal', align: 'start', key: 'title', sortable: false },
     { title: 'Creator', align: 'start', key: 'creator', sortable: false },
-    {
-      title: 'Published On',
-      align: 'start',
-      key: 'date',
-      sortable: true,
-    },
+    { title: 'Published On', align: 'start', key: 'date', sortable: true },
     {
       title: 'Peer Reviewed',
       align: 'center',
