@@ -1,8 +1,9 @@
 {
   "singleQuote": true,
   "semi": true,
+  "printWidth": 80,
   "tabWidth": 2,
-  // "trailingComma": "all",
-  // "bracketSpacing": true,
-  // "vueIndentScriptAndStyle": true
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "vueIndentScriptAndStyle": true
 }
