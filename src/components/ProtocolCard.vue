@@ -1,49 +1,43 @@
 <template>
   <v-card class="protocolCard d-flex flex-column" variant="tonal">
-    <v-img
-      :lazy-src="protocol.image.source || placeholderImageWebp"
-      :src="protocol.image.placeholder || placeholderImageWebp"
-      height="200"
-      class="flex-0-1"
-      cover
-    >
-      <template #error>
-        <v-img :src="placeholderImageJpg">
-          <template #sources>
-            <source :srcset="placeholderImageWebp" />
+    <ProtocolImage
+      :image="protocol.image"
+      :alt="protocol.title"
+      :height="200"
+      class="flex-0-0"
+    />
+
+    <div class="">
+      <v-card-subtitle class="mt-4">
+        {{ datePublished }}
+      </v-card-subtitle>
+
+      <!-- eslint-disable-next-line vue/no-v-html -->
+      <v-card-title class="pt-0" v-html="sanitizedTitleHtml" />
+
+      <v-card-subtitle class="d-flex">
+        {{ protocol?.creator.name }}
+      </v-card-subtitle>
+
+      <v-card-text v-if="protocol.creator?.badges">
+        <div class="d-flex gc-2">
+          <template v-for="badge in protocol.creator?.badges" :key="badge.id">
+            <v-img
+              v-if="badge.image.source"
+              :src="badge.image.source"
+              lazy-src=""
+              :alt="badge.name"
+            />
           </template>
-        </v-img>
-      </template>
-    </v-img>
-
-    <v-card-subtitle class="mt-4">
-      {{ datePublished }}
-    </v-card-subtitle>
-
-    <!-- eslint-disable-next-line vue/no-v-html -->
-    <v-card-title class="pt-0" v-html="sanitizedTitleHtml" />
-
-    <v-card-subtitle class="d-flex">
-      {{ protocol?.creator.name }}
-    </v-card-subtitle>
-
-    <v-card-text v-if="protocol.creator?.badges">
-      <div class="d-flex gc-2">
-        <template v-for="badge in protocol.creator?.badges" :key="badge.id">
-          <v-img
-            v-if="badge.image.source"
-            :src="badge.image.source"
-            lazy-src=""
-            :alt="badge.name"
-          />
-        </template>
-      </div>
-    </v-card-text>
+        </div>
+      </v-card-text>
+    </div>
 
     <v-spacer />
 
-    <v-card-text>
-      Summary: <ProtocolStats :stats="protocol.stats"
+    <v-card-text class="flex-0-0">
+      <span class="font-weight-bold">Stats:</span>
+      <ProtocolStats :stats="protocol.stats"
     /></v-card-text>
 
     <v-divider />
@@ -66,19 +60,10 @@
   import { computed } from 'vue';
   import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
 
+  import ProtocolImage from '@/components/ProtocolImage.vue';
   import ProtocolStats from '@/components/ProtocolStats.vue';
 
   import type { Protocol } from '@/types/protocol';
-
-  const placeholderImageJpg = new URL(
-    '/assets/img/placeholder/image-placeholder.jpg',
-    import.meta.url,
-  ).href;
-
-  const placeholderImageWebp = new URL(
-    '/assets/img/placeholder/image-placeholder.webp',
-    import.meta.url,
-  ).href;
 
   const props = defineProps<{
     protocol: Protocol;
