@@ -16,7 +16,7 @@
     <v-window-item value="table">
       <v-row>
         <v-col cols="12">
-          <ProtocolsTable
+          <ProtocolTable
             :pagination="pagination"
             :protocols-list="items"
             :sort-filters="sortFilters"
@@ -36,22 +36,14 @@
 </template>
 
 <script setup lang="ts">
-  import { defineAsyncComponent, ref, watch } from 'vue';
+  import { ref, watch } from 'vue';
 
   import type { Protocol } from '@/types/protocol';
   import type { Pagination } from '@/types/pagination';
   import type { SearchSortFilters } from '@/types/protocol/query';
 
-  const ProtocolCards = defineAsyncComponent(
-    () =>
-      /* webpackChunkName: "result-cards" */
-      import('@/view/results/ProtocolCards.vue'),
-  );
-  const ProtocolsTable = defineAsyncComponent(
-    () =>
-      /* webpackChunkName: "result-table" */
-      import('@/view/results/ProtocollTable.vue'),
-  );
+  import ProtocolCards from '@/view/results/ProtocolCards.vue';
+  import ProtocolTable from '@/view/results/ProtocolTable.vue';
 
   const props = defineProps<{
     pagination: Pagination;

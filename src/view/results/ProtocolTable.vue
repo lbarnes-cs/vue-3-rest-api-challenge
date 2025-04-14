@@ -19,21 +19,26 @@
     <template #[`item.id`]="{ item }: ProtocolItem">
       <span>{{ item.id }}</span>
     </template>
+
     <template #[`item.name`]="{ item }: ProtocolItem">
       <!-- eslint-disable-next-line vue/no-v-html -->
       <span v-html="sanitizedTitleHtml(item.title_html)" />
     </template>
+
     <template #[`item.creator`]="{ item }: ProtocolItem">
       <span>{{ item.creator.name }}</span>
     </template>
+
     <template #[`item.date`]="{ item }: ProtocolItem">
       <span>{{ formatPublishedDate(item.published_on) }}</span>
     </template>
+
     <template #[`item.peer_reviewed`]="{ item }: ProtocolItem">
       <v-icon :color="item.peer_reviewed ? 'green' : 'red'">
         {{ item.peer_reviewed ? 'mdi-check-circle' : 'mdi-close-circle' }}
       </v-icon>
     </template>
+
     <template #[`item.actions`]="{ item }: ProtocolItem">
       <v-btn
         :href="item.url"
@@ -57,49 +62,7 @@
         columns: InternalDataTableHeader[];
       }"
     >
-      <tr>
-        <td :colspan="columns.length" class="px-0">
-          <v-table class="w-100 bg-grey-lighten-5 border-b-lg">
-            <tbody>
-              <tr>
-                <td>
-                  <ProtocolImage :image="item.image" :alt="item.title" />
-                </td>
-                <td colspan="4">
-                  <span class="font-weight-bold">Description:</span>
-                  <ProtocolDescription
-                    v-if="item.description"
-                    :description="item.description"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td v-if="item.creator.affiliation">
-                  <span class="font-weight-bold">Affiliation:</span>
-                  <div>{{ item.creator.affiliation }}</div>
-                </td>
-
-                <td v-if="item.guidelines">
-                  <span class="font-weight-bold">Guidelines:</span>
-                  <!-- <div>{{ item.guidelines }}</div> -->
-                </td>
-                <td v-if="item.image?.source">
-                  <span class="font-weight-bold">Image Source:</span>
-                  <div>{{ item.image.source }}</div>
-                </td>
-                <td v-if="item.link">
-                  <span class="font-weight-bold">Link:</span>
-                  <a :href="item.link" target="_blank">{{ item.link }}</a>
-                </td>
-                <td v-if="item.stats" class="flex-2-0">
-                  <span class="font-weight-bold">Stats:</span>
-                  <ProtocolStats :stats="item.stats" />
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
-        </td>
-      </tr>
+      <ProtocolExpandedRow :protocol="item" :column-length="columns.length" />
     </template>
   </v-data-table-server>
 </template>
@@ -107,10 +70,6 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
-
-  import ProtocolDescription from '@/components/ProtocolDescription.vue';
-  import ProtocolImage from '@/components/ProtocolImage.vue';
-  import ProtocolStats from '@/components/ProtocolStats.vue';
 
   import type { Protocol } from '@/types/protocol';
   import type { DataTableHeaderType } from '@/types/data-table.ts';
@@ -123,6 +82,8 @@
     type SearchSortFilters,
   } from '@/types/protocol/query';
   import type { InternalDataTableHeader } from 'vuetify/lib/components/VDataTable/types.mjs';
+
+  import ProtocolExpandedRow from '@/components/protocol/ProtocolExpandedRow.vue';
 
   interface DataTableServerOptions {
     page: number;

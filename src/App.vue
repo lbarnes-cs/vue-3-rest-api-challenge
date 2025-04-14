@@ -110,18 +110,21 @@
   import { useProtocols } from '@/composables/useProtocols';
 
   import LayoutDefault from '@/layout/default.vue';
-  import ProtocolHeader from '@/components/ProtocolHeader.vue';
+  import ProtocolHeader from '@/components/protocol/ProtocolHeader.vue';
   import SearchInput from '@/components/SearchInput.vue';
 
-  const ProtocolsResults = defineAsyncComponent(
-    () => import('@/view/ProtocolsResults.vue'),
-  );
-
   const AlertBanner = defineAsyncComponent(
+    /* @rollup/plugin-chunk-name: "main-screen" */
     () => import('@/components/AlertBanner.vue'),
   );
 
+  const ProtocolsResults = defineAsyncComponent(
+    /* @rollup/plugin-chunk-name: "protocols-results" */
+    () => import('@/view/results/ProtocolsResults.vue'),
+  );
+
   const SortQueryDialog = defineAsyncComponent(
+    /* @rollup/plugin-chunk-name: "main-screen" */
     () => import('@/components/SortQueryDialog.vue'),
   );
 

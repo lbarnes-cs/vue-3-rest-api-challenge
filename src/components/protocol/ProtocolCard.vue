@@ -60,8 +60,8 @@
   import { computed } from 'vue';
   import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
 
-  import ProtocolImage from '@/components/ProtocolImage.vue';
-  import ProtocolStats from '@/components/ProtocolStats.vue';
+  import ProtocolImage from '@/components/protocol/ProtocolImage.vue';
+  import ProtocolStats from '@/components/protocol/ProtocolStats.vue';
 
   import type { Protocol } from '@/types/protocol';
 
