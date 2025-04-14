@@ -12,8 +12,8 @@ importers:
         specifier: ^7.4.47
         version: 7.4.47
       '@tanstack/vue-query':
-        specifier: ^5.73.0
-        version: 5.73.3(vue@3.5.13(typescript@5.8.3))
+        specifier: ^5.74.3
+        version: 5.74.3(vue@3.5.13(typescript@5.8.3))
       '@vueuse/core':
         specifier: ^13.1.0
         version: 13.1.0(vue@3.5.13(typescript@5.8.3))
@@ -94,7 +94,7 @@ importers:
         specifier: ^8.29.1
         version: 8.29.1(eslint@9.24.0)(typescript@5.8.3)
       vite:
-        specifier: ^6.2.0
+        specifier: ^6.2.6
         version: 6.2.6(@types/node@22.14.1)(sass@1.86.3)(yaml@2.7.1)
       vite-plugin-vuetify:
         specifier: ^2.1.1
@@ -590,11 +590,11 @@ packages:
     resolution: {integrity: sha512-Wo1iKt2b9OT7d+YGhvEPD3DXvPv2etTusIMhMUoG7fbhmxcXCtIjJDEygy91Y2JFlwGyjqiBPRozme7UD8hoqg==}
     engines: {node: '>=12'}
 
-  '@tanstack/query-core@5.73.3':
-    resolution: {integrity: sha512-LUpsgVT3IkvOECdkQ3QD6esczSH71mAzH/LDZ2cu8j6w430v5W0JB1ulzsG8FFwFBd5fm/ePM2DFpg9TucRMgQ==}
+  '@tanstack/query-core@5.74.3':
+    resolution: {integrity: sha512-Mqk+5o3qTuAiZML248XpNH8r2cOzl15+LTbUsZQEwvSvn1GU4VQhvqzAbil36p+MBxpr/58oBSnRzhrBevDhfg==}
 
-  '@tanstack/vue-query@5.73.3':
-    resolution: {integrity: sha512-e8J0m9BhaF7loNvn+G/JAK4X47+9VdzSSmEhju/+G7XK49o3eFHNCAyFX0fBRAJhEKknDaSWTk9ggSE38wuQ/w==}
+  '@tanstack/vue-query@5.74.3':
+    resolution: {integrity: sha512-ku9QZ2bkhmv2/24q/OD4R+IlKDZ8Gg9+H0SWWip7REbjYxaSyyJSMiFJOCGmnBCLaWbBCDwaFqBXFrxAhM78yw==}
     peerDependencies:
       '@vue/composition-api': ^1.1.2
       vue: ^2.6.0 || ^3.3.0
@@ -2398,12 +2398,12 @@ snapshots:
     dependencies:
       remove-accents: 0.5.0
 
-  '@tanstack/query-core@5.73.3': {}
+  '@tanstack/query-core@5.74.3': {}
 
-  '@tanstack/vue-query@5.73.3(vue@3.5.13(typescript@5.8.3))':
+  '@tanstack/vue-query@5.74.3(vue@3.5.13(typescript@5.8.3))':
     dependencies:
       '@tanstack/match-sorter-utils': 8.19.4
-      '@tanstack/query-core': 5.73.3
+      '@tanstack/query-core': 5.74.3
       '@vue/devtools-api': 6.6.4
       vue: 3.5.13(typescript@5.8.3)
       vue-demi: 0.14.10(vue@3.5.13(typescript@5.8.3))
