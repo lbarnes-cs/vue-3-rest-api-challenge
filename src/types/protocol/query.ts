@@ -18,12 +18,19 @@ export type SearchSortFilters = {
   pageSize: number | null;
 };
 
+export enum FilterQuery {
+  Public = 'public',
+  UserPublic = 'user_public',
+  UserPrivate = 'user_private',
+  SharedWithUser = 'shared_with_user',
+}
+
 export type ProtocolsQuery = {
-  filter?: 'public' | 'user_public' | 'user_private' | 'shared_with_user';
+  filter?: FilterQuery;
   searchKey: string;
+  pageId?: string | number;
   orderField?: OrderField | null;
   orderDir?: OrderDir | null;
-  pageSize?: string | null;
-  pageId?: string;
+  pageSize?: string | number | null;
   // fields is another query parameter, but leaving it out for this version
 };

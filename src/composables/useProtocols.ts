@@ -1,10 +1,14 @@
-import { keepPreviousData, useQuery } from '@tanstack/vue-query';
 import axios from 'axios';
+import { keepPreviousData, useQuery } from '@tanstack/vue-query';
+
+import { usePagination } from '@/composables/usePagination';
+
 import { buildQueryParams } from '@/utils/buildQueryParams';
 
+import { useSortFilters } from './useSortFilters';
+import { useSearchTerm } from './useSearchKey';
+
 import type { ProtocolsResponse } from '@/types/protocol/response';
-import type { ProtocolsQuery } from '@/types/protocol/query';
-import { computed, type Ref } from 'vue';
 import type { Pagination } from '@/types/pagination';
 
 const API_BASE = 'https://www.protocols.io/api/v3';
@@ -41,11 +45,23 @@ const axiosInstance = axios.create({
  * @see https://apidocs.protocols.io/#get-list for more details on the API endpoint.
  */
 const fetchProtocols = async (
-  query: Ref<ProtocolsQuery>,
   signal: AbortSignal,
 ): Promise<ProtocolsResponse> => {
   try {
-    const queryString = buildQueryParams(query.value);
+    const { currentPageQuery } = usePagination();
+    const { sortFilters } = useSortFilters();
+    const { searchKey } = useSearchTerm();
+
+    const queryString = buildQueryParams({
+      searchKey: searchKey.value,
+      orderField: sortFilters.value.orderField,
+      orderDir: sortFilters.value.orderDir,
+      pageSize: sortFilters.value.pageSize,
+      pageId: currentPageQuery.value,
+    });
+
+    console.log('queryString', queryString);
+
     const url = `/protocols?${queryString}`;
 
     const { data } = await axiosInstance.get(url, {
@@ -87,39 +103,33 @@ const fetchProtocols = async (
 };
 
 /**
- * Fetches protocol data from the Protocols.io API and returns a query object.
+ * Fetches protocol data from the Protocols.io API and returns a queried object.
  *
  * This function uses Vue Query to fetch data from the Protocols.io API.
  * The query will be retried twice in case of failure, and it will not refetch on window focus.
  * If the `searchKey` is missing, an error is thrown.
  *
- * @param query - The query parameters for fetching the protocols.
  * @returns The result of the protocol fetch request wrapped in a Vue Query object.
  *
  * @throws Will throw an error if `searchKey` is missing from the `query` object.
  */
-export function useProtocols(query: Ref<ProtocolsQuery>) {
-  const queryKeys = computed(() => [
-    'protocols',
-    query.value.searchKey,
-    query.value.pageSize,
-    query.value.orderField,
-    query.value.orderDir,
-    query.value.pageId,
-  ]);
+export function useProtocols() {
+  const { currentPage } = usePagination();
+  const { sortFilters } = useSortFilters();
+  const { searchKey } = useSearchTerm();
 
   return useQuery<ProtocolsResponse>({
-    queryKey: queryKeys,
+    queryKey: ['protocols', searchKey, sortFilters, currentPage],
     queryFn: async ({ signal }) => {
-      if (!query.value.searchKey) {
+      if (!searchKey.value) {
         throw new Error('Missing Search Key, one is required for API request');
       }
 
-      return fetchProtocols(query, signal);
+      return fetchProtocols(signal);
     },
     retry: 2,
     refetchOnWindowFocus: false,
-    enabled: !!query.value.searchKey,
+    enabled: !!searchKey.value,
     placeholderData: keepPreviousData, // Keeps old data while loading new page
     staleTime: 1000 * 60 * 2, // Cache stays fresh for 2 minutes
   });

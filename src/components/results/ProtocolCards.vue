@@ -2,6 +2,7 @@
   <v-row>
     <v-col
       cols="12"
+      sm="auto"
       class="d-flex align-center ga-3 text-body-2 text-grey-darken-1"
     >
       <span>
@@ -34,14 +35,11 @@
         Page Size:
         <span class="text-grey-darken-4">{{ sortFilters.pageSize }}</span>
       </span>
+    </v-col>
 
-      <v-spacer />
-
-      <v-btn
-        color="blue-lighten-1"
-        size="small"
-        @click="emit('update:displaySortDialog', true)"
-      >
+    <v-spacer />
+    <v-col cols="12" sm="auto">
+      <v-btn color="blue-lighten-1" size="small" @click="toggleDialog">
         <v-icon class="mr-2">mdi-sort</v-icon>
         Change Sort Order
       </v-btn>
@@ -54,8 +52,10 @@
         v-for="item in 8"
         :key="item"
         cols="12"
-        md="6"
+        sm="6"
+        md="4"
         lg="3"
+        xl="2"
         class="d-flex"
       >
         <v-skeleton-loader type="card" class="w-100" />
@@ -69,8 +69,10 @@
         v-for="protocol in protocolsList"
         :key="protocol.id"
         cols="12"
-        md="6"
+        sm="6"
+        md="4"
         lg="3"
+        xl="2"
         class="d-flex"
       >
         <ProtocolCard :protocol="protocol" class="w-100" />
@@ -82,7 +84,7 @@
     <v-col cols="12">
       <v-pagination
         :length="pagination.total_pages"
-        :model-value="pagination.current_page"
+        :model-value="currentPage"
         @update:model-value="handlePaginationChange"
       />
     </v-col>
@@ -91,28 +93,17 @@
 
 <script setup lang="ts">
   import type { Protocol } from '@/types/protocol';
-  import type { Pagination } from '@/types/pagination';
-  import type { SearchSortFilters } from '@/types/protocol/query';
+
+  import { useSortFilters } from '@/composables/useSortFilters';
+  import { usePagination } from '@/composables/usePagination';
 
   import ProtocolCard from '@/components/protocol/ProtocolCard.vue';
 
   defineProps<{
-    pagination: Pagination;
     protocolsList: Protocol[];
-    sortFilters: Partial<SearchSortFilters>;
     isFetching?: boolean;
   }>();
 
-  const emit = defineEmits<{
-    (event: 'update:displaySortDialog', value: boolean): void;
-    (event: 'update:pagination', value: number): void;
-  }>();
-
-  /**
-   * We are using an index: 0 based on the page, so we need to update this accordingly
-   * @param newPage {number}
-   */
-  function handlePaginationChange(newPage: number) {
-    emit('update:pagination', newPage - 1);
-  }
+  const { sortFilters, toggleDialog } = useSortFilters();
+  const { pagination, currentPage, handlePaginationChange } = usePagination();
 </script>

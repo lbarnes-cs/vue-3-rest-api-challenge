@@ -1,7 +1,9 @@
 <template>
   <v-row>
     <v-col cols="auto">
-      <h1>Protocols.io</h1>
+      <h1 class="text-h4">
+        Search <span class="text-grey-darken-2">Protocols.io</span>
+      </h1>
     </v-col>
 
     <v-spacer />

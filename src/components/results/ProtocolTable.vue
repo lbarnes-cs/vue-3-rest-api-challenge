@@ -1,18 +1,21 @@
+// src/view/results/ProtocolTable.vue
 <template>
   <v-data-table-server
     v-model:expanded="expanded"
     :headers="headers"
-    item-key="id"
     :items="protocolsList"
     :items-length="pagination?.total_results || 0"
     :loading="isFetching"
     :page="pagination.current_page"
     :items-per-page="pagination.page_size"
     :sort-by="sortBy"
+    :mobile="!mdAndUp"
+    :density="mdAndUp ? 'default' : 'compact'"
+    item-key="id"
     class="elevation-1"
     show-expand
     @update:options="handleOptionsUpdate"
-    @update:page="handlePageUpdate"
+    @update:page="handlePaginationChange"
     @update:items-per-page="handleItemsPerPage"
   >
     <!-- Main Columns -->
@@ -80,19 +83,19 @@
 
 <script lang="ts" setup>
   import { ref } from 'vue';
+  import { useDisplay } from 'vuetify';
+
   import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
+  import { useSortFilters } from '@/composables/useSortFilters';
+  import { usePagination } from '@/composables/usePagination';
 
   import type { Protocol } from '@/types/protocol';
   import type { DataTableHeaderType } from '@/types/data-table.ts';
-  import type { Pagination } from '@/types/pagination';
   import type { SortItem } from 'vuetify/lib/components/VDataTable/composables/sort.mjs';
-
-  import {
-    OrderDir,
-    OrderField,
-    type SearchSortFilters,
-  } from '@/types/protocol/query';
   import type { InternalDataTableHeader } from 'vuetify/lib/components/VDataTable/types.mjs';
+  import { OrderDir, type SearchSortFilters } from '@/types/protocol/query';
+
+  import { sortSearchFiltersDefault } from '@/constants/sortDefaults';
 
   import ProtocolExpandedRow from '@/components/protocol/ProtocolExpandedRow.vue';
 
@@ -109,19 +112,16 @@
     item: Protocol;
   }
 
-  const props = defineProps<{
+  defineProps<{
     protocolsList: Protocol[];
-    pagination: Pagination;
-    sortFilters: Partial<SearchSortFilters>;
     isFetching?: boolean;
   }>();
 
-  const emit = defineEmits<{
-    (event: 'update:pagination', value: number): void;
-    (event: 'update:sortResults', value: SearchSortFilters): void;
-  }>();
-
   const { sanitize } = useSanitizeHtml();
+  const { mdAndUp } = useDisplay();
+
+  const { sortFilters, updateSortFilters, updatePageSize } = useSortFilters();
+  const { pagination, handlePaginationChange } = usePagination();
 
   // This keeps track of which rows are expanded
   const expanded = ref<string[]>([]);
@@ -141,31 +141,54 @@
     { title: 'Actions', align: 'center', key: 'actions', sortable: false },
   ]);
 
+  const previousSortBy = ref<SortItem[]>([]);
+
   const sortBy: SortItem[] = [
     {
-      key: props.sortFilters.orderField || OrderField.Activity,
-      order: (props.sortFilters.orderDir || OrderDir.Desc).toLowerCase() as
-        | 'asc'
-        | 'desc',
+      // Ensure the defaults are the fallback
+      key: sortFilters.value.orderField!,
+      order: sortFilters.value.orderDir!.toLowerCase() as 'asc' | 'desc',
     },
   ];
 
+  /**
+   * Handles updates to the Vuetify data table's server options, specifically
+   * tracking changes to sorting. Emits an event with updated sort
+   * configuration only when sorting options actually change, to prevent
+   * infinite update loops triggered by reactive props.
+   *
+   * @param {DataTableServerOptions} options - The new server options from the
+   * data table, including sort and pagination.
+   */
   const handleOptionsUpdate = (options: DataTableServerOptions) => {
-    emit('update:sortResults', {
-      orderField: options.sortBy[0]?.key as OrderField,
-      orderDir: options.sortBy[0]?.order as OrderDir,
-      pageSize: options.itemsPerPage,
-    });
+    const newSort = options.sortBy;
+    const oldSort = previousSortBy.value;
+
+    // Check if the sort options have changed compared to the last applied values
+    const sortChanged =
+      newSort.length !== oldSort.length ||
+      newSort.some((item, index) => {
+        return (
+          item.key !== oldSort[index]?.key ||
+          item.order !== oldSort[index]?.order
+        );
+      });
+
+    // Only proceed if the sort options have changed
+    if (sortChanged) {
+      // Update the previous sort tracking reference
+      previousSortBy.value = [...newSort];
+
+      updateSortFilters({
+        orderField: newSort[0]?.key ?? sortSearchFiltersDefault.orderField,
+        orderDir: newSort[0]?.order === 'desc' ? OrderDir.Desc : OrderDir.Asc,
+        pageSize: options.itemsPerPage,
+      } as SearchSortFilters);
+    }
   };
 
   const handleItemsPerPage = (itemsPerPage: number) => {
-    emit('update:sortResults', {
-      pageSize: itemsPerPage,
-    } as SearchSortFilters);
-  };
-
-  const handlePageUpdate = (page: number) => {
-    emit('update:pagination', page - 1); // Still 0-based page index
+    updatePageSize(itemsPerPage);
   };
 
   // Note: we are using this twice, this might be a helper or composable

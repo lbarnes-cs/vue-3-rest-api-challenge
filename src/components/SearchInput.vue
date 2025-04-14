@@ -1,6 +1,6 @@
 <template>
   <v-text-field
-    v-model="localSearchKey"
+    v-model="localSearch"
     :loading="isLoading"
     label="Search Protocols"
     append-inner-icon="mdi-magnify"
@@ -8,51 +8,46 @@
     variant="outlined"
     hide-details
     @click:append-inner="handleAppendClick"
-    @blur="emit('update:modelValue', localSearchKey)"
   />
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue';
+  import { ref, watch, onMounted } from 'vue';
   import { useDebounceFn } from '@vueuse/core';
+
+  import { useSearchTerm } from '@/composables/useSearchKey';
 
   const props = defineProps<{
     isLoading: boolean;
-    modelValue: string;
   }>();
 
-  const emit = defineEmits<{
-    (event: 'update:modelValue', value: string): void;
-  }>();
+  const { searchKey, setSearchKey } = useSearchTerm();
 
-  // Local state initialized from the modelValue prop
-  const localSearchKey = ref(props.modelValue);
+  const localSearch = ref('');
 
-  // Keep local in sync with external changes (if needed)
-  watch(
-    () => props.modelValue,
-    (newVal) => {
-      if (newVal !== localSearchKey.value) {
-        localSearchKey.value = newVal;
-      }
-    },
-  );
+  onMounted(() => {
+    if (searchKey.value) {
+      localSearch.value = searchKey.value;
+    }
+  });
 
-  // Debounced emit to parent
-  const debouncedEmit = useDebounceFn((value: string) => {
-    if (!props.isLoading) {
-      emit('update:modelValue', value);
+  // Debounced setter for composable
+  const debouncedUpdate = useDebounceFn((value: string) => {
+    if (!props.isLoading && value && value.trim()) {
+      setSearchKey(value.trim());
     }
   }, 600);
 
-  // Watch input value and debounce the update
-  watch(localSearchKey, (newVal) => {
-    debouncedEmit(newVal);
+  // Watch local input and apply debounced update
+  watch(localSearch, (newVal) => {
+    debouncedUpdate(newVal);
   });
 
-  // Immediate emit when clicking search
+  // Immediate update on click (search icon)
   const handleAppendClick = () => {
-    emit('update:modelValue', localSearchKey.value);
+    if (!props.isLoading && localSearch.value.trim()) {
+      setSearchKey(localSearch.value.trim());
+    }
   };
 </script>
 
