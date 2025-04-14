@@ -36,14 +36,22 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, watch } from 'vue';
-
-  import ProtocolCards from '@/view/results/ProtocolCards.vue';
-  import ProtocolsTable from '@/view/results/ProtocollTable.vue';
+  import { defineAsyncComponent, ref, watch } from 'vue';
 
   import type { Protocol } from '@/types/protocol';
   import type { Pagination } from '@/types/pagination';
   import type { SearchSortFilters } from '@/types/protocol/query';
+
+  const ProtocolCards = defineAsyncComponent(
+    () =>
+      /* webpackChunkName: "result-cards" */
+      import('@/view/results/ProtocolCards.vue'),
+  );
+  const ProtocolsTable = defineAsyncComponent(
+    () =>
+      /* webpackChunkName: "result-table" */
+      import('@/view/results/ProtocollTable.vue'),
+  );
 
   const props = defineProps<{
     pagination: Pagination;

@@ -39,4 +39,13 @@ export default [
       'eol-last': ['error', 'always'],
     },
   },
+  {
+    files: ['vite.config.ts'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        project: './tsconfig.node.json',
+      },
+    },
+  },
 ];

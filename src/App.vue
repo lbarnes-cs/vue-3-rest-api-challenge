@@ -1,6 +1,6 @@
 <template>
-  <v-app>
-    <v-app-bar flag color="primary">
+  <LayoutDefault>
+    <template #header>
       <v-container>
         <v-row dense>
           <v-col cols="8" class="bg-primary">
@@ -18,64 +18,70 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-app-bar>
+    </template>
 
-    <v-main>
-      <v-container>
-        <ProtocolHeader @refresh="refetch" />
+    <ProtocolHeader @refresh="refetch" />
 
-        <v-row v-if="isLoading || isError || hasEmptyState">
-          <v-col cols="12" class="">
-            <!-- Loading State -->
-            <div v-if="isLoading" class="d-flex justify-center align-center">
-              <v-progress-circular indeterminate class="mr-4" />
-              Loading Data...
-            </div>
+    <v-row v-if="isLoading || isError || hasEmptyState">
+      <v-col cols="12" class="">
+        <!-- Loading State -->
+        <v-fade-transition>
+          <div v-if="isLoading" class="d-flex justify-center align-center">
+            <v-progress-circular indeterminate class="mr-4" />
+            Loading Data...
+          </div>
+        </v-fade-transition>
 
-            <!-- Error State -->
-            <AlertBanner
-              v-if="isError"
-              title="Cannot load Protocols"
-              type="error"
-            >
-              <template #text>
-                <p>
-                  There was an error fetching the protocols. Please check that
-                  you have entered a search value and try again.
-                </p>
-              </template>
+        <!-- Error State -->
+        <v-fade-transition>
+          <AlertBanner
+            v-if="isError"
+            key="error-state"
+            title="Cannot load Protocols"
+            type="error"
+          >
+            <template #text>
+              <p>
+                There was an error fetching the protocols. Please check that you
+                have entered a search value and try again.
+              </p>
+            </template>
 
-              <template #append>
-                <v-code
-                  v-if="error"
-                  class="d-block text-break custom-error mt-4"
-                >
-                  {{ error?.message }}
-                </v-code>
-              </template>
-            </AlertBanner>
+            <template #append>
+              <v-code v-if="error" class="d-block text-break custom-error mt-4">
+                {{ error?.message }}
+              </v-code>
+            </template>
+          </AlertBanner>
+        </v-fade-transition>
 
-            <!-- No items to display -->
-            <AlertBanner
-              v-if="hasEmptyState"
-              title="No Protocols Found"
-              type="info"
-            >
-              <template #text>
-                <p>
-                  No items were found based on the keyword "<strong>{{
-                    queryParameters.searchKey
-                  }}</strong
-                  >". Please try a different keyword.
-                </p>
-              </template>
-            </AlertBanner>
-          </v-col>
-        </v-row>
+        <!-- No items to display -->
+        <v-fade-transition>
+          <AlertBanner
+            v-if="hasEmptyState"
+            key="empty-state"
+            title="No Protocols Found"
+            type="info"
+          >
+            <template #text>
+              <p>
+                No items were found based on the keyword "<strong>{{
+                  queryParameters.searchKey
+                }}</strong
+                >". Please try a different keyword.
+              </p>
+            </template>
+          </AlertBanner>
+        </v-fade-transition>
+      </v-col>
+    </v-row>
 
-        <!-- Display returned items-->
+    <!-- Display returned items-->
+    <keep-alive>
+      <v-fade-transition>
         <ProtocolsResults
           v-if="!isLoading && protocolData?.items.length"
+          :key="tab"
           :is-fetching="isFetching"
           :pagination="protocolData?.pagination"
           :items="protocolData?.items"
@@ -86,8 +92,8 @@
           @update:tab="tab = $event"
           @update:show-dialog="isSortDialogVisible = $event"
         />
-      </v-container>
-    </v-main>
+      </v-fade-transition>
+    </keep-alive>
 
     <SortQueryDialog
       v-if="!isFetching && protocolData?.items.length"
@@ -96,29 +102,55 @@
       @update:show-dialog="isSortDialogVisible = $event"
       @update:sort-results="handleSortFilter"
     />
-  </v-app>
+  </LayoutDefault>
 </template>
 
 <script setup lang="ts">
-  import { computed, ref, watch } from 'vue';
+  import { computed, defineAsyncComponent, ref, watch } from 'vue';
   import { useProtocols } from '@/composables/useProtocols';
 
-  import AlertBanner from '@/components/AlertBanner.vue';
+  import LayoutDefault from '@/layout/default.vue';
   import ProtocolHeader from '@/components/ProtocolHeader.vue';
-  import ProtocolsResults from './view/ProtocolsResults.vue';
   import SearchInput from '@/components/SearchInput.vue';
-  import SortQueryDialog from '@/components/SortQueryDialog.vue';
+
+  const ProtocolsResults = defineAsyncComponent(
+    () => import('@/view/ProtocolsResults.vue'),
+  );
+
+  const AlertBanner = defineAsyncComponent(
+    () => import('@/components/AlertBanner.vue'),
+  );
+
+  const SortQueryDialog = defineAsyncComponent(
+    () => import('@/components/SortQueryDialog.vue'),
+  );
 
   import {
+    OrderDir,
+    OrderField,
     type ProtocolsQuery,
     type SearchSortFilters,
   } from '@/types/protocol/query';
 
   const tab = ref<'cards' | 'table'>('table'); // Default to 'cards'
 
+  /**
+   * Adding defaults here to help ensure that table loads faster.
+   * As the table sets these states with the sort and items per page, calling
+   * the API to be re-fetched. So this is an pre-emptive band-aid solution
+   */
+  const searchSortFilters = ref<SearchSortFilters>({
+    orderField: OrderField.Activity,
+    orderDir: OrderDir.Desc,
+    pageSize: 10,
+  });
+
   const queryParameters = ref<ProtocolsQuery>({
     searchKey: 'temp',
     pageId: '0', // Make sure to initialize this properly
+    orderField: searchSortFilters.value.orderField,
+    orderDir: searchSortFilters.value.orderDir,
+    pageSize: searchSortFilters.value.pageSize?.toString(),
   });
 
   const {
@@ -133,12 +165,6 @@
   const hasEmptyState = computed(
     (): boolean => !isFetching.value && protocolData.value?.items.length === 0,
   );
-
-  const searchSortFilters = ref<SearchSortFilters>({
-    orderField: null,
-    orderDir: null,
-    pageSize: null,
-  });
 
   // Watch for changes in searchKey and reset pageId to the first page
   watch(

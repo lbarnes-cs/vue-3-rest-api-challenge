@@ -54,7 +54,7 @@
         columns,
       }: {
         item: Protocol;
-        columns: DataTableHeaderType[];
+        columns: InternalDataTableHeader[];
       }"
     >
       <tr>
@@ -122,6 +122,7 @@
     OrderField,
     type SearchSortFilters,
   } from '@/types/protocol/query';
+  import type { InternalDataTableHeader } from 'vuetify/lib/components/VDataTable/types.mjs';
 
   interface DataTableServerOptions {
     page: number;
@@ -151,7 +152,7 @@
   const { sanitize } = useSanitizeHtml();
 
   // This keeps track of which rows are expanded
-  const expanded = ref<Protocol[]>([]);
+  const expanded = ref<string[]>([]);
 
   // Table headers definition
   const headers = ref<DataTableHeaderType[]>([

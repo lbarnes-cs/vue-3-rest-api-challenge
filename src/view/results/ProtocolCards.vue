@@ -90,11 +90,17 @@
 </template>
 
 <script setup lang="ts">
-  import ProtocolCard from '@/components/ProtocolCard.vue';
+  import { defineAsyncComponent } from 'vue';
 
   import type { Protocol } from '@/types/protocol';
   import type { Pagination } from '@/types/pagination';
   import type { SearchSortFilters } from '@/types/protocol/query';
+
+  const ProtocolCard = defineAsyncComponent(
+    () =>
+      /* webpackChunkName: "result-cards" */
+      import('@/components/ProtocolCard.vue'),
+  );
 
   defineProps<{
     pagination: Pagination;

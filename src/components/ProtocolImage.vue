@@ -17,6 +17,9 @@
 </template>
 
 <script setup lang="ts">
+  import placeholderImageJpg from '@/assets/img/placeholder/image-placeholder.jpg';
+  import placeholderImageWebp from '@/assets/img/placeholder/image-placeholder.webp';
+
   import type { Image } from '@/types/protocol';
 
   withDefaults(
@@ -29,14 +32,4 @@
       height: 80,
     },
   );
-
-  const placeholderImageJpg = new URL(
-    '/assets/img/placeholder/image-placeholder.jpg',
-    import.meta.url,
-  ).href;
-
-  const placeholderImageWebp = new URL(
-    '/assets/img/placeholder/image-placeholder.webp',
-    import.meta.url,
-  ).href;
 </script>
