@@ -6,7 +6,7 @@ import { usePagination } from '@/composables/usePagination';
 import { buildQueryParams } from '@/utils/buildQueryParams';
 
 import { useSortFilters } from './useSortFilters';
-import { useSearchTerm } from './useSearchKey';
+import { useSearchKey } from './useSearchKey';
 
 import type { ProtocolsResponse } from '@/types/protocol/response';
 import type { Pagination } from '@/types/pagination';
@@ -50,17 +50,15 @@ const fetchProtocols = async (
   try {
     const { currentPageQuery } = usePagination();
     const { sortFilters } = useSortFilters();
-    const { searchKey } = useSearchTerm();
+    const { searchKey } = useSearchKey();
 
     const queryString = buildQueryParams({
-      searchKey: searchKey.value,
+      searchKey: searchKey.value!,
       orderField: sortFilters.value.orderField,
       orderDir: sortFilters.value.orderDir,
       pageSize: sortFilters.value.pageSize,
       pageId: currentPageQuery.value,
     });
-
-    console.log('queryString', queryString);
 
     const url = `/protocols?${queryString}`;
 
@@ -73,7 +71,6 @@ const fetchProtocols = async (
     if (axios.isAxiosError(error)) {
       if (error.code === 'ERR_CANCELED') {
         console.log('Request was canceled');
-        // return Promise.reject({ canceled: true });
 
         // Return an object with all required properties even when canceled
         return {
@@ -116,7 +113,7 @@ const fetchProtocols = async (
 export function useProtocols() {
   const { currentPage } = usePagination();
   const { sortFilters } = useSortFilters();
-  const { searchKey } = useSearchTerm();
+  const { searchKey } = useSearchKey();
 
   return useQuery<ProtocolsResponse>({
     queryKey: ['protocols', searchKey, sortFilters, currentPage],

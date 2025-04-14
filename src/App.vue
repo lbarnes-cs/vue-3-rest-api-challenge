@@ -1,4 +1,3 @@
-<!-- App.vue -->
 <template>
   <v-app>
     <component :is="currentPage" />
@@ -6,15 +5,23 @@
 </template>
 
 <script setup lang="ts">
-  import { computed } from 'vue';
+  import { computed, defineAsyncComponent } from 'vue';
 
-  import WelcomeBanner from '@/pages/SearchLanding.vue';
-  import SearchResults from '@/pages/SearchResults.vue';
-  import { useSearchTerm } from '@/composables/useSearchKey';
+  const SearchLanding = defineAsyncComponent(
+    /* @rollup/plugin-chunk-name: "search-landing" */
+    () => import('@/pages/SearchLanding.vue'),
+  );
 
-  const { searchKey } = useSearchTerm();
+  const SearchResults = defineAsyncComponent(
+    /* @rollup/plugin-chunk-name: "protocols-results" */
+    () => import('@/pages/SearchResults.vue'),
+  );
+
+  import { useSearchKey } from '@/composables/useSearchKey';
+
+  const { searchKey } = useSearchKey();
 
   const currentPage = computed(() =>
-    searchKey.value === null ? WelcomeBanner : SearchResults,
+    searchKey.value === null ? SearchLanding : SearchResults,
   );
 </script>

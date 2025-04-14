@@ -15,13 +15,13 @@
   import { ref, watch, onMounted } from 'vue';
   import { useDebounceFn } from '@vueuse/core';
 
-  import { useSearchTerm } from '@/composables/useSearchKey';
+  import { useSearchKey } from '@/composables/useSearchKey';
 
   const props = defineProps<{
     isLoading: boolean;
   }>();
 
-  const { searchKey, setSearchKey } = useSearchTerm();
+  const { searchKey, updateSearchKey } = useSearchKey();
 
   const localSearch = ref('');
 
@@ -34,7 +34,7 @@
   // Debounced setter for composable
   const debouncedUpdate = useDebounceFn((value: string) => {
     if (!props.isLoading && value && value.trim()) {
-      setSearchKey(value.trim());
+      updateSearchKey(value.trim());
     }
   }, 600);
 
@@ -46,7 +46,7 @@
   // Immediate update on click (search icon)
   const handleAppendClick = () => {
     if (!props.isLoading && localSearch.value.trim()) {
-      setSearchKey(localSearch.value.trim());
+      updateSearchKey(localSearch.value.trim());
     }
   };
 </script>

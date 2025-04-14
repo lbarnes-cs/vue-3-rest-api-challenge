@@ -1,4 +1,5 @@
 import {
+  FilterQuery,
   OrderDir,
   OrderField,
   type ProtocolsQuery,
@@ -26,7 +27,7 @@ describe('buildQueryParams', () => {
     expect(
       buildQueryParams({
         searchKey: 'australia',
-        filter: 'user_public',
+        filter: FilterQuery.UserPublic,
       }),
     ).toBe('filter=user_public&key=australia');
   });

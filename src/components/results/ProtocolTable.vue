@@ -1,4 +1,3 @@
-// src/view/results/ProtocolTable.vue
 <template>
   <v-data-table-server
     v-model:expanded="expanded"

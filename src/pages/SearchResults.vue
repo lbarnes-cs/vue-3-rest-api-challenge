@@ -1,4 +1,3 @@
-<!-- src/pages/SearchResults.vue -->
 <template>
   <LayoutDefault>
     <template #header>
@@ -105,7 +104,7 @@
   import ProtocolHeader from '@/components/protocol/ProtocolHeader.vue';
   import SearchInput from '@/components/SearchInput.vue';
 
-  import { useSearchTerm } from '@/composables/useSearchKey';
+  import { useSearchKey } from '@/composables/useSearchKey';
 
   const AlertBanner = defineAsyncComponent(
     /* @rollup/plugin-chunk-name: "alert-banner" */
@@ -123,7 +122,7 @@
   );
 
   const { setPagination } = usePagination();
-  const { searchKey } = useSearchTerm();
+  const { searchKey } = useSearchKey();
 
   const tab = ref<'cards' | 'table'>('cards');
 
@@ -140,11 +139,11 @@
     (): boolean => !isFetching.value && protocolData.value?.items.length === 0,
   );
 
-  // Watch for pagination and apply it to the composable
+  // Get the pagination from the useQuery and save it to the composable
+  // TODO: Work out why onSucceed isn't working, this is not the cleanest way to manage setting pagination
   watch(
     () => protocolData.value?.pagination,
     (newPagination) => {
-      console.log('new pagination', newPagination);
       setPagination(newPagination);
     },
   );

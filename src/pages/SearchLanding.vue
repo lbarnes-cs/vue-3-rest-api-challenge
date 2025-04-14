@@ -1,4 +1,3 @@
-<!-- src/pages/SearchLanding.vue -->
 <template>
   <v-row class="d-flex justify-center align-center">
     <v-col cols="12">
@@ -14,5 +13,10 @@
 </template>
 
 <script setup lang="ts">
-  import WelcomeBanner from '@/components/WelcomeBanner.vue';
+  import { defineAsyncComponent } from 'vue';
+
+  const WelcomeBanner = defineAsyncComponent(
+    /* @rollup/plugin-chunk-name: "search-landing" */
+    () => import('@/components/WelcomeBanner.vue'),
+  );
 </script>

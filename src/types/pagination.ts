@@ -8,5 +8,5 @@ export type Pagination = {
   page_size: number; // Number of items per page
   first: number; // ID of the first item on the current page
   last: number; // ID of the last item on the current page
-  changed_on: number; // Unix timestamp of when the list was last changed
+  changed_on: number | null; // Unix timestamp of when the list was last changed
 };

@@ -74,9 +74,9 @@
 
 <script setup lang="ts">
   import { ref, computed, onMounted, watch } from 'vue';
-  import { useSearchTerm } from '@/composables/useSearchKey';
+  import { useSearchKey } from '@/composables/useSearchKey';
 
-  const { setSearchKey } = useSearchTerm();
+  const { updateSearchKey } = useSearchKey();
 
   const localSearch = ref('');
   const isValid = ref(true);
@@ -110,7 +110,7 @@
       return;
     }
 
-    setSearchKey(localSearch.value.trim());
+    updateSearchKey(localSearch.value.trim());
   };
 
   watch(localSearch, (val: string) => {
@@ -129,6 +129,7 @@
 </script>
 
 <style lang="scss" scoped>
+  // TODO: Clean up UI on error state
   .submit-form {
     &--hasError,
     .v-input--error {
@@ -157,6 +158,7 @@
     }
   }
 
+  // TODO: remove repeated code
   .v-input {
     ::v-deep(input) {
       background-color: transparent !important;

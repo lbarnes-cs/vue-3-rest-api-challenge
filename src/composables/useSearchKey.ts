@@ -1,12 +1,12 @@
-import { ref, watch } from 'vue';
+import { readonly, ref, watch } from 'vue';
 import { usePagination } from './usePagination';
 
 const searchKey = ref<string | null>(null);
 
 const { resetPagination } = usePagination();
 
-export function useSearchTerm() {
-  const setSearchKey = (searchTerm: string) => {
+export function useSearchKey() {
+  const updateSearchKey = (searchTerm: string) => {
     if (!searchTerm) {
       throw new Error('A search key needs to be set');
     }
@@ -23,7 +23,7 @@ export function useSearchTerm() {
   );
 
   return {
-    searchKey,
-    setSearchKey,
+    searchKey: readonly(searchKey),
+    updateSearchKey,
   };
 }

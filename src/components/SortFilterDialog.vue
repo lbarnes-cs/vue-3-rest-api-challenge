@@ -1,4 +1,3 @@
-// src/components/SortQueryDialog.vue
 <template>
   <v-dialog
     :model-value="isSortDialogVisible"

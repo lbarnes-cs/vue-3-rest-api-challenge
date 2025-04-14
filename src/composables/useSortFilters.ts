@@ -39,9 +39,7 @@ export function useSortFilters() {
   // When filters are changed, reset pagination
   watch(
     () => ({ ...sortFilters.value }),
-    (val: SearchSortFilters) => {
-      console.log('[watch] Updated sort filters:', val);
-      //     applySortFilters(val);
+    () => {
       resetPagination();
     },
     { deep: true },
