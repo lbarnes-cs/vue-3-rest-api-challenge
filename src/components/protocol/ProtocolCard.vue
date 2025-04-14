@@ -22,7 +22,20 @@
       <v-card-title class="pt-0" v-html="sanitizedTitleHtml" />
 
       <v-card-subtitle class="d-flex">
-        {{ protocol?.creator.name }}
+        <a
+          v-if="protocol.creator.link"
+          :href="protocol.creator.link"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          class="text-link"
+          data-testid="creator-link"
+        >
+          {{ protocol.creator.name }}
+        </a>
+
+        <span v-else data-testid="creator-name">
+          {{ protocol.creator.name }}
+        </span>
       </v-card-subtitle>
     </div>
 

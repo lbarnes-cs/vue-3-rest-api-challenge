@@ -26,7 +26,18 @@
     </template>
 
     <template #[`item.creator`]="{ item }: ProtocolItem">
-      <span>{{ item.creator.name }}</span>
+      <a
+        v-if="item.creator.link"
+        :href="item.creator.link"
+        target="_blank"
+        rel="nofollow noopener noreferrer"
+        class="text-link"
+        data-testid="creator-link"
+      >
+        {{ item.creator.name }}
+      </a>
+
+      <span v-else data-testid="creator-name"> {{ item.creator.name }} </span>
     </template>
 
     <template #[`item.date`]="{ item }: ProtocolItem">
