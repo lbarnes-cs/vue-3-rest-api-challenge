@@ -46,10 +46,6 @@
 </script>
 
 <style lang="scss" scoped>
-  .list-none {
-    list-style-type: none;
-  }
-
   ul li {
     color: var(--v-grey-lighten1);
   }

@@ -4,10 +4,14 @@
       <v-table class="w-100 bg-grey-lighten-5 border-b-lg">
         <tbody>
           <tr>
-            <td>
-              <ProtocolImage :image="protocol.image" :alt="protocol.title" />
+            <td width="200" class="vertical-baseline">
+              <ProtocolImage
+                :image="protocol.image"
+                :alt="protocol.title"
+                :width="200"
+              />
             </td>
-            <td colspan="4">
+            <td colspan="2">
               <span class="font-weight-bold">Description:</span>
               <ProtocolDescription
                 v-if="protocol.description"
@@ -17,26 +21,26 @@
           </tr>
 
           <tr>
-            <td v-if="protocol.creator.affiliation">
+            <td
+              v-if="protocol.creator.affiliation"
+              width="200"
+              class="vertical-baseline"
+            >
               <span class="font-weight-bold">Affiliation:</span>
               <p>{{ protocol.creator.affiliation }}</p>
             </td>
 
-            <td v-if="protocol.guidelines">
-              <span class="font-weight-bold">Guidelines:</span>
+            <td v-if="protocol.authors" class="vertical-baseline">
+              <span class="font-weight-bold">Authors:</span>
+
+              <ProtocolAuthorsList :authors="protocol.authors" />
             </td>
 
-            <td v-if="protocol.image?.source">
-              <span class="font-weight-bold">Image Source:</span>
-              <p>{{ protocol.image.source }}</p>
-            </td>
-
-            <td v-if="protocol.link">
-              <span class="font-weight-bold">Link:</span>
-              <a :href="protocol.link" target="_blank">{{ protocol.link }}</a>
-            </td>
-
-            <td v-if="protocol.stats" class="flex-2-0">
+            <td
+              v-if="protocol.stats.length"
+              width="200"
+              class="vertical-baseline"
+            >
               <span class="font-weight-bold">Stats:</span>
               <ProtocolStats :stats="protocol.stats" />
             </td>
@@ -48,6 +52,7 @@
 </template>
 
 <script setup lang="ts">
+  import ProtocolAuthorsList from '@/components/protocol/ProtocolAuthorsList.vue';
   import ProtocolDescription from '@/components/protocol/ProtocolDescription.vue';
   import ProtocolImage from '@/components/protocol/ProtocolImage.vue';
   import ProtocolStats from '@/components/protocol/ProtocolStats.vue';

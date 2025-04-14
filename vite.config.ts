@@ -32,6 +32,15 @@ export default defineConfig({
     },
   },
 
+  // Global styles are only being implemented to components with style-scoped enabled
+  // css: {
+  //   preprocessorOptions: {
+  //     scss: {
+  //       additionalData: `@import "@/assets/styles/main.scss";`,
+  //     },
+  //   },
+  // },
+
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),

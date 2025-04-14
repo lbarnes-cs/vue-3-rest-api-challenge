@@ -6,6 +6,9 @@ import { vuetify } from './plugins/vuetify';
 
 import { VueQueryPlugin, QueryClient } from '@tanstack/vue-query';
 
+// Import global styles
+import './assets/styles/main.scss';
+
 const app = createApp(App);
 
 // Create a query client instance

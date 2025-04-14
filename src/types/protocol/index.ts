@@ -9,7 +9,7 @@ type Badges = {
   image: Image;
 };
 
-type Author = {
+export type Author = {
   affiliation: string;
   badges: Badges[];
   image: Image;

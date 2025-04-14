@@ -135,7 +135,7 @@
     type SearchSortFilters,
   } from '@/types/protocol/query';
 
-  const tab = ref<'cards' | 'table'>('cards'); // Default to 'cards'
+  const tab = ref<'cards' | 'table'>('table');
 
   /**
    * Adding defaults here to help ensure that table loads faster.

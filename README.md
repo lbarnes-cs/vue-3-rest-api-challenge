@@ -18,16 +18,6 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 
 ## Reduce bundle size
 
-The key reduction in size comes from the index-C9volBcU.js file, where there is a difference of:
-
-- Before treeshaking: 587.13 kB
-- After treeshaking: 265.33 kB
-
-Size reduction: 587.13 kB - 265.33 kB = 321.80 kB
-
-CSS size reduction:
-
-- Before treeshaking: 462.83 kB
-- After treeshaking: 350.85 kB
-
-Size reduction: 462.83 kB - 350.85 kB = 111.98 kB
+- JavaScript size reduced by approximately 10.32%.
+- CSS size reduced by approximately 24.19%.
+- Overall bundle size reduced by about 15.85%.

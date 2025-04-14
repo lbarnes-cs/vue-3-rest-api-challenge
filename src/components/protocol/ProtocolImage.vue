@@ -2,6 +2,8 @@
   <v-img
     :lazy-src="image.source || placeholderImageWebp"
     :src="image.placeholder || placeholderImageWebp"
+    :max-width="maxWidth"
+    :width="width"
     :alt="alt"
     :height="height"
     cover
@@ -24,12 +26,16 @@
 
   withDefaults(
     defineProps<{
-      height?: number | string;
-      alt: string;
       image: Image;
+      height?: number | string;
+      maxWidth?: number | string;
+      width?: number | string;
+      alt: string;
     }>(),
     {
       height: 80,
+      maxWidth: undefined,
+      width: undefined,
     },
   );
 </script>
