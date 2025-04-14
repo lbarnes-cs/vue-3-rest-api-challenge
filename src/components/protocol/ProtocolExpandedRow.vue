@@ -19,7 +19,7 @@
           <tr>
             <td v-if="protocol.creator.affiliation">
               <span class="font-weight-bold">Affiliation:</span>
-              <div>{{ protocol.creator.affiliation }}</div>
+              <p>{{ protocol.creator.affiliation }}</p>
             </td>
 
             <td v-if="protocol.guidelines">
@@ -28,7 +28,7 @@
 
             <td v-if="protocol.image?.source">
               <span class="font-weight-bold">Image Source:</span>
-              <div>{{ protocol.image.source }}</div>
+              <p>{{ protocol.image.source }}</p>
             </td>
 
             <td v-if="protocol.link">
