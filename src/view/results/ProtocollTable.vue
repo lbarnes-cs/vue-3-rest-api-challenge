@@ -61,28 +61,41 @@
         <td :colspan="columns.length" class="px-0">
           <v-table class="w-100 bg-grey-lighten-5 border-b-lg">
             <tbody>
-              <v-row>
-                <v-col v-if="item.acknowledgements">
-                  <strong>Acknowledgements:</strong>
-                  <div>{{ item.acknowledgements }}</div>
-                </v-col>
-                <v-col v-if="item.guidelines">
-                  <strong>Guidelines:</strong>
-                  <div>{{ item.guidelines }}</div>
-                </v-col>
-                <v-col v-if="item.image?.source">
-                  <strong>Image Source:</strong>
+              <tr>
+                <td>
+                  <ProtocolImage :image="item.image" :alt="item.title" />
+                </td>
+                <td colspan="4">
+                  <span class="font-weight-bold">Description:</span>
+                  <ProtocolAbstract
+                    v-if="item.description"
+                    :description="item.description"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td v-if="item.creator.affiliation">
+                  <span class="font-weight-bold">Affiliation:</span>
+                  <div>{{ item.creator.affiliation }}</div>
+                </td>
+
+                <td v-if="item.guidelines">
+                  <span class="font-weight-bold">Guidelines:</span>
+                  <!-- <div>{{ item.guidelines }}</div> -->
+                </td>
+                <td v-if="item.image?.source">
+                  <span class="font-weight-bold">Image Source:</span>
                   <div>{{ item.image.source }}</div>
-                </v-col>
-                <v-col v-if="item.link">
-                  <strong>Link:</strong>
+                </td>
+                <td v-if="item.link">
+                  <span class="font-weight-bold">Link:</span>
                   <a :href="item.link" target="_blank">{{ item.link }}</a>
-                </v-col>
-                <v-col v-if="item.stats">
-                  <strong>Stats:</strong>
-                  <div>{{ item.stats }}</div>
-                </v-col>
-              </v-row>
+                </td>
+                <td v-if="item.stats" class="flex-2-0">
+                  <span class="font-weight-bold">Stats:</span>
+                  <ProtocolStats :stats="item.stats" />
+                </td>
+              </tr>
             </tbody>
           </v-table>
         </td>
@@ -94,15 +107,21 @@
 <script lang="ts" setup>
   import { ref } from 'vue';
   import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
+
+  import ProtocolAbstract from '@/components/ProtocolAbstract.vue';
+  import ProtocolImage from '@/components/ProtocolImage.vue';
+  import ProtocolStats from '@/components/ProtocolStats.vue';
+
   import type { Protocol } from '@/types/protocol';
   import type { DataTableHeaderType } from '@/types/data-table.ts';
   import type { Pagination } from '@/types/pagination';
+  import type { SortItem } from 'vuetify/lib/components/VDataTable/composables/sort.mjs';
+
   import {
     OrderDir,
     OrderField,
     type SearchSortFilters,
   } from '@/types/protocol/query';
-  import type { SortItem } from 'vuetify/lib/components/VDataTable/composables/sort.mjs';
 
   interface DataTableServerOptions {
     page: number;
