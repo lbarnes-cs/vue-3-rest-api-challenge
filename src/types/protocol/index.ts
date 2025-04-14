@@ -1,4 +1,4 @@
-type Image = {
+export type Image = {
   placeholder: string | null;
   source: string | null;
 };

@@ -11,3 +11,7 @@ Learn more about the recommended Project Setup and IDE Support in the [Vue Docs 
 ### Why using PNPM
 
 ### Why I choose to use Vuetify
+
+### Thoughts
+
+- On the table view, we re-fetch the API request with the order and page_size, as these are set by defaults. Maybe these should automatically be included in the first API request, saves us calling the request twice?
