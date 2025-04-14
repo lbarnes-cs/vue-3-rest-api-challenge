@@ -8,9 +8,9 @@ export const orderFieldOptions = [
   { title: 'Article ID', value: OrderField.Id },
 ];
 
-export const orderDirOptions = Object.keys(OrderDir).map((key) => ({
-  title: key.charAt(0).toUpperCase() + key.slice(1),
-  value: OrderDir[key as keyof typeof OrderDir],
-}));
+export const orderDirOptions = [
+  { title: 'Ascending', value: OrderDir.Asc },
+  { title: 'Descending', value: OrderDir.Desc },
+];
 
 export const pageSizeOptions = [10, 20, 30, 40, 50];

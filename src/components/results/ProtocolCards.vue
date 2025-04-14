@@ -5,15 +5,24 @@
       sm="auto"
       class="d-flex align-center ga-3 text-body-2 text-grey-darken-1"
     >
-      <span>
-        Results:
-        <span class="text-grey-darken-4">{{ pagination.total_results }}</span>
+      <span class="d-flex align-center gc-1">
+        <span></span>Results:
+        <v-skeleton-loader v-if="isFetching" type="text" width="20" />
+
+        <span v-else class="text-grey-darken-4">
+          {{ pagination.total_results }}</span
+        >
       </span>
 
-      <span>
+      <span class="d-flex align-center gc-1">
         Page:
-        <span class="text-grey-darken-4"
-          >{{ pagination.current_page }} / {{ pagination.total_pages }}</span
+        <template v-if="isFetching">
+          <v-skeleton-loader type="text" width="12" />
+          <span class="mx-2">/</span>
+          <v-skeleton-loader type="text" width="12" />
+        </template>
+        <span v-else class="text-grey-darken-4"
+          >{{ currentPage }} / {{ pagination.total_pages }}</span
         >
       </span>
 
@@ -107,3 +116,10 @@
   const { sortFilters, toggleDialog } = useSortFilters();
   const { pagination, currentPage, handlePaginationChange } = usePagination();
 </script>
+
+<style lang="scss" scoped>
+  ::v-deep(.v-skeleton-loader__text) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+</style>

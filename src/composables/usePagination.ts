@@ -19,6 +19,7 @@ export function usePagination() {
    */
   const resetPagination = () => {
     currentPage.value = FIRST_PAGE_ID;
+    pagination.value = {} as Pagination;
   };
 
   /**

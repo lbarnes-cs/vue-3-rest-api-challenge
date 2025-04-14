@@ -8,7 +8,7 @@
     persistent
     @update:model-value="toggleDialog"
   >
-    <v-form @submit.prevent="handleSubmit">
+    <v-form class="fill-height" @submit.prevent="handleSubmit">
       <v-card class="pa-2">
         <v-card-title class="mt-2 d-flex align-center">
           <span class="text-h5"> Sort Filters </span>
@@ -48,6 +48,8 @@
             </v-col>
           </v-row>
         </v-container>
+
+        <v-spacer />
 
         <v-card-actions>
           <v-btn color="red" @click="toggleDialog"> Cancel </v-btn>

@@ -64,7 +64,7 @@
         @click.prevent="isCardExpanded = !isCardExpanded"
       >
         <v-icon class="mr-1">mdi-chevron-down</v-icon>
-        {{ isCardExpanded ? 'View' : 'Hide' }} More
+        {{ isCardExpanded ? 'Hide' : 'View' }} More
       </v-btn>
     </v-card-actions>
 

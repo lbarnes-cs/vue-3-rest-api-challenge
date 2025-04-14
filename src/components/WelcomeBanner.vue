@@ -1,21 +1,25 @@
 <template>
   <v-card
-    class="pa-10 text-center text-white"
+    class="pa-4 pa-sm-10 text-center text-white"
     :style="bannerGradient"
     rounded="xl"
   >
     <v-container class="d-flex flex-column align-center justify-center">
       <v-icon size="84" class="mb-4">mdi-microscope</v-icon>
 
-      <h1 class="text-h3 font-weight-bold mb-2">Welcome to Protocol Finder</h1>
-      <p class="text-h6 opacity-75 mb-8">
+      <h1 class="text-h4 text-h3 font-weight-bold mb-2">
+        Welcome to Protocol Finder
+      </h1>
+
+      <p class="text-subtitle-1 text-sm-h6 opacity-75 mb-8">
         Search thousands of scientific protocols
       </p>
 
       <v-form
-        v-model="isValid"
+        ref="formRef"
+        validate-on="lazy"
         class="w-100 submit-form"
-        :class="{ 'submit-form--hasError': formError }"
+        :class="{ 'submit-form--hasError': !isValid && hasSubmitted }"
         @submit.prevent="handleSearch"
       >
         <v-row
@@ -25,25 +29,19 @@
           no-gutters
           style="max-width: 600px"
         >
-          <v-col cols="12" md="10" class="text-left">
+          <v-col cols="12" md="8" class="text-left d-flex">
             <v-text-field
               v-model="localSearch"
               label="Search for protocols..."
-              :rules="rules"
+              :rules="[requiredField]"
               density="comfortable"
               variant="outlined"
               :hide-details="true"
               color="white"
               class="rounded-te-0 font-weight-bold"
               prepend-inner-icon="mdi-magnify"
+              autofocus
             />
-          </v-col>
-
-          <v-col
-            cols="12"
-            md="auto"
-            class="d-flex justify-center justify-md-start mt-2 mt-md-0"
-          >
             <v-btn
               color="white"
               variant="flat"
@@ -55,7 +53,7 @@
             </v-btn>
           </v-col>
 
-          <v-col cols="12">
+          <v-col cols="12" md="8">
             <!-- Display the error here -->
             <v-slide-y-transition>
               <v-alert
@@ -75,26 +73,39 @@
 </template>
 
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted, watch } from 'vue';
   import { useSearchTerm } from '@/composables/useSearchKey';
 
   const { setSearchKey } = useSearchTerm();
 
   const localSearch = ref('');
+  const isValid = ref(true);
+  const hasSubmitted = ref(false);
+  const formError = ref<string | null>(null);
+  const formRef = ref();
 
-  // Form Validation
-  const isValid = ref(false);
-  const formError = ref('');
+  onMounted(() => {
+    requestAnimationFrame(() => {
+      const input = document.querySelector(
+        '.v-text-field input',
+      ) as HTMLInputElement;
+      input?.focus();
+    });
+  });
 
   const requiredFiedMessage = 'Please enter a search value';
-  const rules = [(v: string) => !!v.trim() || requiredFiedMessage];
+  const requiredField = (v: string) => !!v.trim() || requiredFiedMessage;
 
   const handleSearch = async () => {
-    // Reset message
+    hasSubmitted.value = true;
     formError.value = '';
 
-    // Check form is valid
-    if (!isValid.value) {
+    if (!formRef.value) return;
+
+    const result = await formRef.value.validate();
+    isValid.value = result.valid;
+
+    if (!result.valid) {
       formError.value = requiredFiedMessage;
       return;
     }
@@ -102,20 +113,25 @@
     setSearchKey(localSearch.value.trim());
   };
 
+  watch(localSearch, (val: string) => {
+    if (val.trim()) {
+      formError.value = '';
+    }
+  });
+
   const bannerGradient = computed(() => ({
     background: `linear-gradient(
       135deg,
-      rgb(var(--v-theme-primary), 1) 20%,
-      rgb(var(--v-theme-accent), 1) 110%
+      rgb(var(--v-theme-primary)) 20%,
+      rgb(var(--v-theme-accent)) 110%
     )`,
-    backgroundColor: `rgb(var(--v-theme-secondary))`,
   }));
 </script>
 
 <style lang="scss" scoped>
   .submit-form {
-    &--hasError {
-      // Target only Vuetify fields inside this block
+    &--hasError,
+    .v-input--error {
       ::v-deep(.v-field),
       ::v-deep(.v-label),
       ::v-deep(.v-messages__message),
@@ -138,6 +154,23 @@
     ::v-deep(.v-btn) {
       border-top-left-radius: 0;
       border-bottom-left-radius: 0;
+    }
+  }
+
+  .v-input {
+    ::v-deep(input) {
+      background-color: transparent !important;
+      color: inherit !important;
+    }
+
+    ::v-deep(input:-webkit-autofill),
+    ::v-deep(input:-webkit-autofill:focus),
+    ::v-deep(input:-internal-autofill-selected) {
+      box-shadow: 0 0 0px 1000px transparent inset !important;
+      -webkit-text-fill-color: inherit !important;
+      transition:
+        background-color 9999s ease-out,
+        color 9999s ease-out !important;
     }
   }
 </style>

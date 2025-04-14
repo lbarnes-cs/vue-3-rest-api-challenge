@@ -15,13 +15,15 @@
     <v-footer>
       <v-container>
         <v-row>
-          <v-col cols="12" class="d-flex align-center ga-3">
+          <v-col cols="12" sm="2" class="d-flex align-center ga-3">
             <span>
               <span class="text-grey-darken-1">Challenge completed by:</span>
               Laurence Barnes
             </span>
+          </v-col>
 
-            <v-spacer />
+          <v-spacer />
+          <v-col cols="12" sm="auto">
             <v-btn
               href="https://www.linkedin.com/in/laurencebarnes/"
               variant="text"
