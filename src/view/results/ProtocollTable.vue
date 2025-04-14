@@ -67,7 +67,7 @@
                 </td>
                 <td colspan="4">
                   <span class="font-weight-bold">Description:</span>
-                  <ProtocolAbstract
+                  <ProtocolDescription
                     v-if="item.description"
                     :description="item.description"
                   />
@@ -108,7 +108,7 @@
   import { ref } from 'vue';
   import { useSanitizeHtml } from '@/composables/useSanitizeHtml';
 
-  import ProtocolAbstract from '@/components/ProtocolAbstract.vue';
+  import ProtocolDescription from '@/components/ProtocolDescription.vue';
   import ProtocolImage from '@/components/ProtocolImage.vue';
   import ProtocolStats from '@/components/ProtocolStats.vue';
 

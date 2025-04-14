@@ -24,8 +24,6 @@
       <v-container>
         <ProtocolHeader @refresh="refetch" />
 
-        <!-- Tabs for selecting view: Cards or Table -->
-
         <v-row v-if="isLoading || isError || hasEmptyState">
           <v-col cols="12" class="">
             <!-- Loading State -->
@@ -84,7 +82,7 @@
           :tab="tab"
           :sort-filters="searchSortFilters"
           @update:pagination="handlePaginationChange"
-          @update:sort-results="handleSortResults"
+          @update:sort-results="handleSortFilter"
           @update:tab="tab = $event"
           @update:show-dialog="isSortDialogVisible = $event"
         />
@@ -96,7 +94,7 @@
       :sort-filters="searchSortFilters"
       :show-dialog="isSortDialogVisible"
       @update:show-dialog="isSortDialogVisible = $event"
-      @update:sort-results="handleSortResults"
+      @update:sort-results="handleSortFilter"
     />
   </v-app>
 </template>
@@ -106,10 +104,10 @@
   import { useProtocols } from '@/composables/useProtocols';
 
   import AlertBanner from '@/components/AlertBanner.vue';
-  import SortQueryDialog from '@/components/SortQueryDialog.vue';
   import ProtocolHeader from '@/components/ProtocolHeader.vue';
   import ProtocolsResults from './view/ProtocolsResults.vue';
   import SearchInput from '@/components/SearchInput.vue';
+  import SortQueryDialog from '@/components/SortQueryDialog.vue';
 
   import {
     type ProtocolsQuery,
@@ -142,7 +140,7 @@
     pageSize: null,
   });
 
-  // Watch for changes in searchKey and reset pageId to 1
+  // Watch for changes in searchKey and reset pageId to the first page
   watch(
     () => queryParameters.value.searchKey,
     () => {
@@ -150,6 +148,9 @@
     },
   );
 
+  /**
+   * Display the Sort Filters dialog window
+   */
   const isSortDialogVisible = ref(false);
 
   /**
@@ -173,11 +174,13 @@
 
   /**
    * Sets the sort query parameters.
-   * Also resets the pagination.
+   *
+   * We need to resets the pagination, as we will restart the
+   * results when we change the query parameters
    *
    * @param querySortSearch
    */
-  function handleSortResults(querySortSearch: SearchSortFilters) {
+  function handleSortFilter(querySortSearch: SearchSortFilters) {
     resetPagination();
 
     // We can clean this up and use `queryParameters` as our main source of truth
