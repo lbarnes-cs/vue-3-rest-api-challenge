@@ -36,11 +36,7 @@
               <ProtocolAuthorsList :authors="protocol.authors" />
             </td>
 
-            <td
-              v-if="protocol.stats.length"
-              width="200"
-              class="vertical-baseline"
-            >
+            <td v-if="protocol.stats" width="300" class="vertical-baseline">
               <span class="font-weight-bold">Stats:</span>
               <ProtocolStats :stats="protocol.stats" />
             </td>

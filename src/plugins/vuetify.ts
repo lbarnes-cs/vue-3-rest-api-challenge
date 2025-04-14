@@ -22,6 +22,7 @@ export const vuetify = createVuetify({
           primary: '#002e5d', // Labforward primary blue
           secondary: '#d50032', // Labforward primary red
           accent: '#63A2BC', // Labforward secondary blue
+          brand: '#9d0226', // Labforward darker red
         },
       },
     },

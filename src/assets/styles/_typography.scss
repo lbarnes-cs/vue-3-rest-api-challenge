@@ -1,0 +1,8 @@
+.text-link {
+  color: rgb(var(--v-theme-secondary));
+  transition: color ease-in-out 300ms;
+
+  &:hover {
+    color: rgb(var(--v-theme-brand));
+  }
+}

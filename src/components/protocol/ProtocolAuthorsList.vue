@@ -7,16 +7,29 @@
         :alt="author.name"
         size="32"
         class="mr-2"
+        data-testid="author-avatar"
       />
 
-      <div>
-        <a v-if="author.link" :href="author.link" target="_blank">
+      <div data-testid="author-summary">
+        <a
+          v-if="author.link"
+          :href="author.link"
+          target="_blank"
+          rel="nofollow noopener noreferrer"
+          class="text-link"
+          data-testid="author-link"
+        >
           {{ author.name }}
         </a>
 
-        <span v-else> {{ author.name }} </span>,
+        <span v-else data-testid="author-name"> {{ author.name }} </span>,
 
-        <span class="text-grey-darken-2">{{ author.affiliation }}</span>
+        <span
+          v-if="author.affiliation"
+          class="text-grey-darken-2"
+          data-testid="author-affiliation"
+          >{{ author.affiliation }}</span
+        >
       </div>
     </li>
   </ul>
