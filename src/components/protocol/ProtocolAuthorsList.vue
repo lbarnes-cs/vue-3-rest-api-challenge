@@ -3,13 +3,11 @@
     <li v-for="author in authors" :key="author.username">
       <v-avatar
         v-if="author.image?.source"
-        :src="author.image.source"
+        :image="author.image.source"
+        :alt="author.name"
         size="32"
-      >
-        <template #default>
-          <v-img :src="author.image.source" />
-        </template>
-      </v-avatar>
+        class="mr-2"
+      />
 
       <div>
         <a v-if="author.link" :href="author.link" target="_blank">
@@ -31,9 +29,3 @@
     authors: Author[];
   }>();
 </script>
-
-<!-- <style lang="scss" scoped>
-  .junk {
-    color: red;
-  }
-</style> -->
