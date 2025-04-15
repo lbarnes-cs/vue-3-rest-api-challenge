@@ -51,10 +51,12 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
+    setupFiles: ['vitest.setup.ts'],
     coverage: {
       provider: 'v8',
     },
     include: ['tests/**/*.spec.ts', 'src/**/*.spec.ts'],
+    exclude: ['tests/e2e/**'],
     css: false,
     server: {
       deps: {

@@ -5,23 +5,30 @@
     rel="noopener noreferrer"
     class="protocolCard d-flex flex-column"
     variant="tonal"
+    :data-protocol-id="protocol.id"
+    data-testid="protocol-card"
   >
     <ProtocolImage
       :image="protocol.image"
       :alt="protocol.title"
       :height="200"
       class="flex-0-0"
+      data-testid="protocol-img"
     />
 
     <div class="">
-      <v-card-subtitle class="mt-4">
+      <v-card-subtitle class="mt-4" data-testid="protocol-published-date">
         {{ datePublished }}
       </v-card-subtitle>
 
       <!-- eslint-disable-next-line vue/no-v-html -->
-      <v-card-title class="pt-0" v-html="sanitizedTitleHtml" />
+      <v-card-title
+        class="pt-0"
+        data-testid="protocol-title"
+        v-html="sanitizedTitleHtml"
+      />
 
-      <v-card-subtitle class="d-flex">
+      <v-card-subtitle class="d-flex" data-testid="protocol-creator">
         <a
           v-if="protocol.creator.link"
           :href="protocol.creator.link"
@@ -30,7 +37,7 @@
           class="text-link"
           data-testid="creator-link"
         >
-          {{ protocol.creator.name }}
+          <span data-testid="creator-name">{{ protocol.creator.name }}</span>
         </a>
 
         <span v-else data-testid="creator-name">
@@ -43,13 +50,17 @@
 
     <v-card-text class="flex-0-0">
       <span class="font-weight-bold">Stats:</span>
-      <ProtocolStats :stats="protocol.stats"
-    /></v-card-text>
+      <ProtocolStats :stats="protocol.stats" />
+    </v-card-text>
 
     <v-divider />
 
     <v-card-actions>
-      <v-btn variant="outlined" color="secondary">
+      <v-btn
+        variant="outlined"
+        color="secondary"
+        data-testid="protocol-view-btn"
+      >
         <v-icon class="mr-1">mdi-eye</v-icon>
         Open
       </v-btn>
@@ -61,6 +72,8 @@
         color="primary"
         class="viewMore"
         :class="{ 'viewMore--is-active': isCardExpanded }"
+        :data-is-expanded="isCardExpanded"
+        data-testid="protocol-expand-btn"
         @click.prevent="isCardExpanded = !isCardExpanded"
       >
         <v-icon class="mr-1">mdi-chevron-down</v-icon>
@@ -69,11 +82,11 @@
     </v-card-actions>
 
     <v-slide-y-transition>
-      <div v-if="isCardExpanded">
+      <div v-if="isCardExpanded" data-testid="protocol-expand-section">
         <v-divider />
 
         <v-card-text>
-          <div class="mb-2">
+          <div class="mb-2" data-testid="protocol-affiliation">
             <span class="font-weight-bold"> Affiliation </span>
             <p>{{ protocol.creator.affiliation }}</p>
           </div>

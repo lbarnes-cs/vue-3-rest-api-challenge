@@ -1,15 +1,23 @@
 <template>
-  <LayoutDefault>
+  <LayoutDefault data-testid="searchResults">
     <template #header>
-      <v-container>
+      <v-container data-testid="result-header">
         <v-row dense>
           <v-col cols="7" class="bg-primary d-flex align-center gc-2">
             <span class="text-subtitle-2 hidden-xs">View:</span>
             <v-tabs v-model="tab" bg-color="primary">
-              <v-tab value="cards" aria-label="View protocols in card format">
+              <v-tab
+                value="cards"
+                aria-label="View protocols in card format"
+                data-testid="view-cards"
+              >
                 Cards
               </v-tab>
-              <v-tab value="table" aria-label="View protocols in table format">
+              <v-tab
+                value="table"
+                aria-label="View protocols in table format"
+                data-testid="view-table"
+              >
                 Table
               </v-tab>
             </v-tabs>
@@ -59,7 +67,11 @@
             </template>
 
             <template #append>
-              <v-code v-if="error" class="d-block text-break custom-error mt-4">
+              <v-code
+                v-if="error"
+                class="d-block text-break custom-error mt-4"
+                data-testid="error-message"
+              >
                 {{ error?.message }}
               </v-code>
             </template>
