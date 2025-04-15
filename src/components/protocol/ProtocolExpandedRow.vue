@@ -1,7 +1,10 @@
 <template>
   <tr>
     <td :colspan="columnLength" class="px-0">
-      <v-table class="w-100 bg-grey-lighten-5 border-b-lg">
+      <v-table
+        :class="{ 'custom-row--is-mobile': smAndDown }"
+        class="custom-row w-100 bg-grey-lighten-5 border-b-lg"
+      >
         <tbody>
           <tr>
             <td width="200" class="vertical-baseline">
@@ -48,6 +51,8 @@
 </template>
 
 <script setup lang="ts">
+  import { useDisplay } from 'vuetify';
+
   import ProtocolAuthorsList from '@/components/protocol/ProtocolAuthorsList.vue';
   import ProtocolDescription from '@/components/protocol/ProtocolDescription.vue';
   import ProtocolImage from '@/components/protocol/ProtocolImage.vue';
@@ -59,4 +64,15 @@
     protocol: Protocol;
     columnLength: number;
   }>();
+
+  const { smAndDown } = useDisplay();
 </script>
+
+<style lang="scss" scoped>
+  .custom-row {
+    &--is-mobile {
+      width: 95vw !important;
+      overflow: hidden;
+    }
+  }
+</style>

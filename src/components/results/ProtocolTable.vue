@@ -220,7 +220,7 @@
   const sanitizedTitleHtml = (title: string): string => sanitize(title);
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   /* Optional styling to improve appearance */
   .v-data-table td {
     word-break: break-word;
