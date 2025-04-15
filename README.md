@@ -1,7 +1,7 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/eec789fa-0306-4471-b7b6-166706f0e001/deploy-status)](https://app.netlify.com/sites/lbarnes-labforward-challenge/deploys) ![Vue](https://img.shields.io/badge/vue-3.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/typescript-4.x-blue)
 ![Vite](https://img.shields.io/badge/vite-fast-purple)
-![Vuetify](https://img.shields.io/badge/Vuetify-3.x-1867C0?logo=vuetify&logoColor=white) ![pnpm](https://img.shields.io/badge/pnpm-fast-F69220?logo=pnpm&logoColor=white)
+![Vuetify](https://img.shields.io/badge/Vuetify-3.x-1867C0?logo=vuetify&logoColor=white) ![pnpm](https://img.shields.io/badge/pnpm-fast-F69220?logo=pnpm&logoColor=white) ![Playwright](https://img.shields.io/badge/playwright-testing-blue)
 
 # Labforward Frontend Challenge 🚀
 
@@ -63,9 +63,19 @@ By default, the app will be available at [http://localhost:4000](http://localhos
 
 ---
 
-## ⚙️ Running Tests and Linter
+## 🚀 Running Tests and Linter
 
-### Run Tests
+### Run End-to-End (E2E) Tests
+
+To run the **E2E tests** with **Playwright**, you can execute:
+
+```bash
+pnpm run test:e2e
+```
+
+This will run all tests in the `tests/e2e` folder. Make sure you have a valid **Test environment** set up (e.g., `.env` variables) and the application running.
+
+### Run Unit Tests
 
 To run unit tests with **Vitest**:
 
@@ -113,9 +123,7 @@ pnpm run tsc
 
 <img src="https://lbarnes-labforward-challenge.netlify.app/screenshots/mobile-cards-view.jpg" 
      alt="Mobile view displaying protocol search results in card layout" 
-     width="300"/>
-
-<img src="https://lbarnes-labforward-challenge.netlify.app/screenshots/mobile-table-view.jpg" 
+     width="300"/><img src="https://lbarnes-labforward-challenge.netlify.app/screenshots/mobile-table-view.jpg" 
      alt="Mobile view displaying protocol search results in table layout" 
      width="300"/>
 
@@ -211,6 +219,14 @@ Currently, the folder structure could be more modular and better organized. To e
 - Group composables, components, and views in dedicated folders to improve maintainability and clarity.
 - Modularize reusable utilities into separate files or directories.
 
+### 3. E2E Tests in the Deployment Pipeline
+
+We plan to include **E2E tests** in our **CI/CD pipeline** on Netlify. Specifically, we aim to run these tests on the **preview branch** that Netlify creates for each pull request. This will ensure that all tests are validated in the preview environment before changes are merged into the main branch. Here's what we will focus on:
+
+- Automatically run the E2E tests on the preview deployment.
+- Monitor the results and ensure that only passing tests can be merged.
+- Run tests on various network conditions (e.g., status 500 errors).
+
 ---
 
 ## 🔧 Deployment
@@ -222,6 +238,19 @@ The app is deployed to **Netlify**, with streamlined **CI/CD** to ensure smooth 
 - 🌐 Production is updated automatically when changes are merged into the main branch
 
 This setup ensures the app is always in a reliable, tested state, with fast feedback loops during development.
+
+---
+
+## 🧪 Tests Summary
+
+Here’s a summary of the key tests that have been implemented:
+
+- **Main Happy Path**: Test the full user flow, from landing on the welcome screen to submitting the search and navigating to the main application, including error handling.
+- **Search API Request**: Validate that the app sends the correct API request when a user searches for protocols.
+- **Network Request Monitoring**: Ensure that all network requests are correctly triggered and logged for monitoring.
+- **Network Failures (Status 500)**: Test the app’s behavior when the network request fails (e.g., status code 500).
+- **Mocks/Fixtures**: Use mocks and fixtures to reduce network traffic and speed up test run time by simulating API responses.
+- **Pagination Behavior**: Verify that pagination is working correctly, including clicking through pages and verifying network requests are triggered.
 
 ---
 
