@@ -1,4 +1,3 @@
-// src/composables/useSortFilters.ts
 import { ref, watch } from 'vue';
 import { sortSearchFiltersDefault } from '@/constants/sortDefaults';
 import { usePagination } from './usePagination';
