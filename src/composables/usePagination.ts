@@ -24,13 +24,18 @@ export function usePagination() {
   };
 
   /**
-   * We are using an index: 0 based on the page, so we need to update this accordingly
+   * Set the current page, outside of the pagination object. This helps us
+   * keep track of the UI changes, without waiting on the latest version
+   * of pagination from the API to return
    * @param newPage {number}
    */
   function handlePaginationChange(newPageNumber: number) {
     currentPage.value = newPageNumber;
   }
 
+  /**
+   * We are using an index: 0 based on the page, so we need to update this accordingly
+   */
   const currentPageQuery = computed(() => currentPage.value - 1);
 
   return {
