@@ -11,7 +11,13 @@
     "test:ci": "vitest run",
     "lint": "eslint . --ext .ts,.vue",
     "lint:fix": "eslint . --ext .ts,.vue --fix",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test:e2e": "playwright test",
+    "test:e2e:config": "playwright test --config=playwright.config.ts",
+    "test:e2e:env": "VITE_ENV=production playwright test",
+    "test:e2e:headless": "playwright test --headless",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug"
   },
   "keywords": [
     "vue 3",
@@ -31,6 +37,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.24.0",
+    "@playwright/test": "^1.51.1",
     "@types/node": "^22.14.1",
     "@typescript-eslint/eslint-plugin": "^8.30.1",
     "@typescript-eslint/parser": "^8.30.1",
@@ -47,6 +54,7 @@
     "jsdom": "^26.1.0",
     "lefthook": "^1.11.10",
     "lint-staged": "^15.5.1",
+    "playwright": "^1.51.1",
     "prettier": "^3.5.3",
     "sass": "^1.86.3",
     "typescript": "~5.8.3",
