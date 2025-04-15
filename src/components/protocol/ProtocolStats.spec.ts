@@ -5,6 +5,7 @@ import ProtocolStats from './ProtocolStats.vue';
 
 describe('ProtocolStats.vue', () => {
   const baseStats = {
+    number_of_steps: 43,
     number_of_votes: 123,
     number_of_views: 4567,
     number_of_exports: 89,
@@ -19,6 +20,7 @@ describe('ProtocolStats.vue', () => {
       },
     });
 
+    expect(wrapper.get('[data-testid="stats-steps"]').text()).toContain('43');
     expect(wrapper.get('[data-testid="stats-votes"]').text()).toContain('123');
     expect(wrapper.get('[data-testid="stats-views"]').text()).toContain('4.6k');
     expect(wrapper.get('[data-testid="stats-exports"]').text()).toContain('89');
@@ -30,6 +32,7 @@ describe('ProtocolStats.vue', () => {
 
   it('renders only stats that have non-zero values', () => {
     const partialStats = {
+      number_of_steps: 0,
       number_of_views: 1000,
       number_of_comments: 0,
       number_of_votes: 0,
@@ -41,6 +44,7 @@ describe('ProtocolStats.vue', () => {
       },
     });
 
+    expect(wrapper.find('[data-testid="stats-steps"]').exists()).toBe(false);
     expect(wrapper.find('[data-testid="stats-views"]').exists()).toBe(true);
     expect(wrapper.find('[data-testid="stats-comments"]').exists()).toBe(false);
     expect(wrapper.find('[data-testid="stats-votes"]').exists()).toBe(false);
@@ -50,6 +54,7 @@ describe('ProtocolStats.vue', () => {
     const wrapper = mount(ProtocolStats, {
       props: {
         stats: {
+          number_of_steps: 0,
           number_of_votes: 0,
           number_of_views: 0,
           number_of_exports: 0,

@@ -3,6 +3,10 @@
     class="d-flex flex-wrap list-none p-0 font-weight-medium"
     data-testid="stats"
   >
+    <li v-if="stats.number_of_steps" data-testid="stats-steps" class="mr-2">
+      <span class="text-grey-darken-1">Steps</span>
+      {{ formatNumber(stats.number_of_steps) }}
+    </li>
     <li v-if="stats.number_of_votes" data-testid="stats-votes" class="mr-2">
       <span class="text-grey-darken-1">Works for</span>
       {{ formatNumber(stats.number_of_votes) }}
