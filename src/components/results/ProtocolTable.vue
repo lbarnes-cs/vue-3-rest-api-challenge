@@ -13,6 +13,7 @@
     item-key="id"
     class="elevation-1"
     show-expand
+    data-testid="view-table"
     @update:options="handleOptionsUpdate"
     @update:page="onPageChange"
     @update:items-per-page="onItemsPerPageChange"

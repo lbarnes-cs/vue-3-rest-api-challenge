@@ -6,8 +6,12 @@
           <v-col cols="7" class="bg-primary d-flex align-center gc-2">
             <span class="text-subtitle-2 hidden-xs">View:</span>
             <v-tabs v-model="tab" bg-color="primary">
-              <v-tab value="cards">Cards</v-tab>
-              <v-tab value="table">Table</v-tab>
+              <v-tab value="cards" aria-label="View protocols in card format">
+                Cards
+              </v-tab>
+              <v-tab value="table" aria-label="View protocols in table format">
+                Table
+              </v-tab>
             </v-tabs>
           </v-col>
 
@@ -26,7 +30,11 @@
       <v-col cols="12" class="">
         <!-- Loading State -->
         <v-fade-transition>
-          <div v-if="isLoading" class="d-flex justify-center align-center">
+          <div
+            v-if="isLoading"
+            class="d-flex justify-center align-center"
+            data-testid="results-init-loading"
+          >
             <v-progress-circular indeterminate class="mr-4" />
             Loading Data...
           </div>
@@ -39,6 +47,9 @@
             key="error-state"
             title="Cannot load Protocols"
             type="error"
+            data-testid="results-fetching-error"
+            role="alert"
+            aria-live="assertive"
           >
             <template #text>
               <p>
@@ -62,6 +73,9 @@
             key="empty-state"
             title="No Protocols Found"
             type="info"
+            data-testid="results-non-found"
+            role="alert"
+            aria-live="assertive"
           >
             <template #text>
               <p>
@@ -86,6 +100,13 @@
           :pagination="protocolData?.pagination"
           :items="protocolData?.items"
           :tab="tab"
+          :data-testid="`view-${tab}`"
+          aria-live="polite"
+          :aria-label="
+            tab === 'cards'
+              ? 'View protocols in cards format'
+              : 'View protocols in table format'
+          "
           @update:tab="tab = $event"
         />
       </v-fade-transition>

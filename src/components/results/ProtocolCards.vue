@@ -1,11 +1,12 @@
 <template>
-  <v-row>
+  <v-row data-testid="view-cards">
     <v-col cols="12" sm="auto" class="d-flex align-center">
       <v-row dense>
         <v-col
           cols="12"
           sm="auto"
           class="d-flex align-center ga-3 pb-0 pb-sm-3 text-body-2 text-grey-darken-1"
+          data-testid="cards-results-header"
         >
           <span class="d-flex align-center">
             <span class="mr-1">Results:</span>
@@ -32,6 +33,7 @@
           cols="12"
           sm="auto"
           class="d-flex align-center ga-3 pb-0 pb-sm-3 text-body-2 text-grey-darken-1"
+          data-testid="cards-sort-summary"
         >
           <span v-if="sortFilters.orderField">
             Sort by:
@@ -56,8 +58,14 @@
     </v-col>
 
     <v-spacer />
+
     <v-col cols="12" sm="auto">
-      <v-btn color="blue-lighten-1" size="small" @click="toggleDialog">
+      <v-btn
+        color="blue-lighten-1"
+        size="small"
+        data-testid="card-sort-btn"
+        @click="toggleDialog"
+      >
         <v-icon class="mr-2">mdi-sort</v-icon>
         Change Sort Order
       </v-btn>
@@ -65,7 +73,7 @@
   </v-row>
 
   <template v-if="isFetching">
-    <v-row>
+    <v-row data-testid="card-loading-skeleton">
       <v-col
         v-for="item in 8"
         :key="item"
@@ -75,6 +83,7 @@
         lg="3"
         xl="2"
         class="d-flex"
+        data-testid="card-skeleton"
       >
         <v-skeleton-loader type="card" class="w-100" />
       </v-col>
@@ -92,6 +101,8 @@
         lg="3"
         xl="2"
         class="d-flex"
+        data-testid="protocol-card-col"
+        :data-protocol-id="protocol.id"
       >
         <ProtocolCard :protocol="protocol" class="w-100" />
       </v-col>
@@ -103,6 +114,8 @@
       <v-pagination
         :length="pagination.total_pages"
         :model-value="currentPage"
+        data-testid="card-pagination"
+        :data-current-page="currentPage"
         @update:model-value="onPageChange"
       />
     </v-col>
