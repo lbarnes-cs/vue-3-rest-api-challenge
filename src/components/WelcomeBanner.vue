@@ -3,15 +3,22 @@
     class="pa-4 pa-sm-10 text-center text-white"
     :style="bannerGradient"
     rounded="xl"
+    data-testid="banner"
   >
     <v-container class="d-flex flex-column align-center justify-center">
       <v-icon size="84" class="mb-4">mdi-microscope</v-icon>
 
-      <h1 class="text-h4 text-h3 font-weight-bold mb-2">
+      <h1
+        class="text-h4 text-h3 font-weight-bold mb-2"
+        data-testid="banner-header"
+      >
         Welcome to Protocol Finder
       </h1>
 
-      <p class="text-subtitle-1 text-sm-h6 opacity-75 mb-8">
+      <p
+        class="text-subtitle-1 text-sm-h6 opacity-75 mb-8"
+        data-testid="banner-subtitle"
+      >
         Search thousands of scientific protocols
       </p>
 
@@ -20,6 +27,7 @@
         validate-on="lazy"
         class="w-100 submit-form"
         :class="{ 'submit-form--hasError': !isValid && hasSubmitted }"
+        data-testid="banner-form"
         @submit.prevent="handleSearch"
       >
         <v-row
@@ -41,6 +49,8 @@
               class="rounded-te-0 font-weight-bold"
               prepend-inner-icon="mdi-magnify"
               autofocus
+              data-testid="banner-input"
+              aria-label="Search for scientific protocols"
             />
             <v-btn
               color="white"
@@ -48,6 +58,8 @@
               type="submit"
               class="font-weight-bold"
               height="48"
+              data-testid="banner-btn"
+              aria-label="Submit search"
             >
               Search
             </v-btn>
@@ -61,6 +73,7 @@
                 variant="tonal"
                 type="error"
                 class="form-error mt-4 text-left"
+                data-testid="banner-error"
               >
                 <span class="text-white font-weight-bold">{{ formError }}</span>
               </v-alert>
