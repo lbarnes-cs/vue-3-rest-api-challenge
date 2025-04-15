@@ -245,12 +245,11 @@ This setup ensures the app is always in a reliable, tested state, with fast feed
 
 Here’s a summary of the key tests that have been implemented:
 
-- **Main Happy Path**: Test the full user flow, from landing on the welcome screen to submitting the search and navigating to the main application, including error handling.
+- **Main Happy Path**: Test the full user flow, from landing on the welcome screen to submitting the search, pagination and navigating to the main application, including error handling.
 - **Search API Request**: Validate that the app sends the correct API request when a user searches for protocols.
 - **Network Request Monitoring**: Ensure that all network requests are correctly triggered and logged for monitoring.
 - **Network Failures (Status 500)**: Test the app’s behavior when the network request fails (e.g., status code 500).
 - **Mocks/Fixtures**: Use mocks and fixtures to reduce network traffic and speed up test run time by simulating API responses.
-- **Pagination Behavior**: Verify that pagination is working correctly, including clicking through pages and verifying network requests are triggered.
 
 ---
 
