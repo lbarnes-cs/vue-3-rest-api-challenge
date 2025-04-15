@@ -36,9 +36,24 @@ describe('buildQueryParams', () => {
     expect(
       buildQueryParams({
         searchKey: 'australia',
-        pageSize: '20',
+        pageSize: 20,
       }),
     ).toBe('filter=public&key=australia&page_size=20');
+  });
+
+  it('should return a full query parameter for all possible fields', () => {
+    expect(
+      buildQueryParams({
+        searchKey: 'searchKey',
+        orderField: OrderField.Activity,
+        orderDir: OrderDir.Asc,
+        pageSize: 10,
+        pageId: 0,
+        filter: FilterQuery.Public,
+      }),
+    ).toBe(
+      'filter=public&key=searchKey&order_field=activity&order_dir=asc&page_size=10',
+    );
   });
 
   it('should return a query parameter with two words joined by the plus symbol. Filter is default', () => {
