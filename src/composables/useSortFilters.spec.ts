@@ -36,6 +36,7 @@ describe('useSortFilters', () => {
     const newFilters = { ...sortSearchFiltersDefault, orderField: 'new' };
 
     // Update the filters
+    console.log('fail here');
     sortFiltersComposable.updateSortFilters(newFilters);
 
     await nextTick();
