@@ -1,5 +1,5 @@
 <template>
-  <v-row>
+  <v-row data-id="results-header">
     <v-col cols="auto" class="align-self-center">
       <h1 class="text-h6 text-sm-h5">
         Search <span class="text-grey-darken-2">Protocols.io</span>

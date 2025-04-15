@@ -11,6 +11,7 @@ export function usePagination() {
   const setPagination = (newPagination?: Pagination | null) => {
     if (newPagination?.current_page) {
       pagination.value = newPagination;
+      currentPage.value = newPagination.current_page;
     }
   };
   /**

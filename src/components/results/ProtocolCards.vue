@@ -1,49 +1,58 @@
 <template>
   <v-row>
-    <v-col
-      cols="12"
-      sm="auto"
-      class="d-flex align-center ga-3 text-body-2 text-grey-darken-1"
-    >
-      <span class="d-flex align-center">
-        <span class="mr-1">Results:</span>
-        <v-skeleton-loader v-if="isFetching" type="text" width="20" />
-
-        <span v-else class="text-grey-darken-4">
-          {{ pagination.total_results }}</span
+    <v-col cols="12" sm="auto" class="d-flex align-center">
+      <v-row dense>
+        <v-col
+          cols="12"
+          sm="auto"
+          class="d-flex align-center ga-3 pb-0 pb-sm-3 text-body-2 text-grey-darken-1"
         >
-      </span>
+          <span class="d-flex align-center">
+            <span class="mr-1">Results:</span>
+            <v-skeleton-loader v-if="isFetching" type="text" width="20" />
 
-      <span class="d-flex align-center">
-        <span class="mr-1">Page:</span>
-        <template v-if="isFetching">
-          <v-skeleton-loader type="text" width="12" />
-          <span class="mx-2">/</span>
-          <v-skeleton-loader type="text" width="12" />
-        </template>
-        <span v-else class="text-grey-darken-4"
-          >{{ currentPage }} / {{ pagination.total_pages }}</span
+            <span v-else class="text-grey-darken-4">
+              {{ pagination.total_results }}</span
+            >
+          </span>
+
+          <span class="d-flex align-center mr-1">
+            <span class="mr-1">Page:</span>
+            <template v-if="isFetching">
+              <v-skeleton-loader type="text" width="12" />
+              <span class="mx-2">/</span>
+              <v-skeleton-loader type="text" width="12" />
+            </template>
+            <span v-else class="text-grey-darken-4"
+              >{{ currentPage }} / {{ pagination.total_pages }}</span
+            >
+          </span>
+        </v-col>
+        <v-col
+          cols="12"
+          sm="auto"
+          class="d-flex align-center ga-3 pb-0 pb-sm-3 text-body-2 text-grey-darken-1"
         >
-      </span>
+          <span v-if="sortFilters.orderField">
+            Sort by:
+            <span class="text-grey-darken-4 text-capitalize">{{
+              sortFilters.orderField
+            }}</span>
+          </span>
 
-      <span v-if="sortFilters.orderField">
-        Sort by:
-        <span class="text-grey-darken-4 text-capitalize">{{
-          sortFilters.orderField
-        }}</span>
-      </span>
+          <span v-if="sortFilters.orderDir">
+            Sort Order:
+            <span class="text-grey-darken-4 text-capitalize">{{
+              sortFilters.orderDir
+            }}</span>
+          </span>
 
-      <span v-if="sortFilters.orderDir">
-        Sort Order:
-        <span class="text-grey-darken-4 text-capitalize">{{
-          sortFilters.orderDir
-        }}</span>
-      </span>
-
-      <span v-if="sortFilters.pageSize">
-        Page Size:
-        <span class="text-grey-darken-4">{{ sortFilters.pageSize }}</span>
-      </span>
+          <span v-if="sortFilters.pageSize">
+            Page Size:
+            <span class="text-grey-darken-4">{{ sortFilters.pageSize }}</span>
+          </span>
+        </v-col>
+      </v-row>
     </v-col>
 
     <v-spacer />
@@ -94,19 +103,22 @@
       <v-pagination
         :length="pagination.total_pages"
         :model-value="currentPage"
-        @update:model-value="handlePaginationChange"
+        @update:model-value="onPagechange"
       />
     </v-col>
   </v-row>
 </template>
 
 <script setup lang="ts">
+  import { useGoTo } from 'vuetify';
+
   import type { Protocol } from '@/types/protocol';
 
   import { useSortFilters } from '@/composables/useSortFilters';
   import { usePagination } from '@/composables/usePagination';
 
   import ProtocolCard from '@/components/protocol/ProtocolCard.vue';
+  import type { InternalGoToOptions } from 'vuetify/lib/composables/goto.mjs';
 
   defineProps<{
     protocolsList: Protocol[];
@@ -115,6 +127,23 @@
 
   const { sortFilters, toggleDialog } = useSortFilters();
   const { pagination, currentPage, handlePaginationChange } = usePagination();
+
+  const goTo = useGoTo();
+
+  // Scroll to the first error element using Vuetify's goTo
+  const goToOptions: Partial<Partial<InternalGoToOptions>> = {
+    duration: 200,
+    easing: 'easeInOutCubic',
+    offset: 0,
+  };
+
+  const onPagechange = (pageNumber: number) => {
+    // Scroll to the top
+    goTo('[data-id="results-header"]', goToOptions);
+
+    // Change pagination, triggering the refetch of the API and starts the isFetching state
+    handlePaginationChange(pageNumber);
+  };
 </script>
 
 <style lang="scss" scoped>
