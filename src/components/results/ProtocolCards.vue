@@ -5,8 +5,8 @@
       sm="auto"
       class="d-flex align-center ga-3 text-body-2 text-grey-darken-1"
     >
-      <span class="d-flex align-center gc-1">
-        <span></span>Results:
+      <span class="d-flex align-center">
+        <span class="mr-1">Results:</span>
         <v-skeleton-loader v-if="isFetching" type="text" width="20" />
 
         <span v-else class="text-grey-darken-4">
@@ -14,8 +14,8 @@
         >
       </span>
 
-      <span class="d-flex align-center gc-1">
-        Page:
+      <span class="d-flex align-center">
+        <span class="mr-1">Page:</span>
         <template v-if="isFetching">
           <v-skeleton-loader type="text" width="12" />
           <span class="mx-2">/</span>

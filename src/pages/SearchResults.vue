@@ -3,7 +3,8 @@
     <template #header>
       <v-container>
         <v-row dense>
-          <v-col cols="8" class="bg-primary">
+          <v-col cols="8" class="bg-primary d-flex align-center gc-2">
+            <span class="text-subtitle-2 hidden-xs">View:</span>
             <v-tabs v-model="tab" bg-color="primary">
               <v-tab value="cards">Cards</v-tab>
               <v-tab value="table">Table</v-tab>

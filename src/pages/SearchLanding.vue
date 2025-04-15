@@ -1,7 +1,7 @@
 <template>
   <v-row class="d-flex justify-center align-center">
     <v-col cols="12">
-      <v-container>
+      <v-container max-width="800">
         <v-row>
           <v-col cols="12">
             <WelcomeBanner />

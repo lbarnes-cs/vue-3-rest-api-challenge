@@ -13,4 +13,4 @@ export const orderDirOptions = [
   { title: 'Descending', value: OrderDir.Desc },
 ];
 
-export const pageSizeOptions = [10, 20, 30, 40, 50];
+export const pageSizeOptions = [5, 10, 20, 30, 40, 50];
