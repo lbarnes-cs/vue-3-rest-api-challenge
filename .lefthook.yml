@@ -1,6 +1,8 @@
 pre-commit:
   parallel: true
   commands:
+    tsc:
+      run: pnpm tsc --noEmit
     lint-staged:
       run: npx lint-staged
     test:
