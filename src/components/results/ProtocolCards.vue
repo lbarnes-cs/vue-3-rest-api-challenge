@@ -103,22 +103,20 @@
       <v-pagination
         :length="pagination.total_pages"
         :model-value="currentPage"
-        @update:model-value="onPagechange"
+        @update:model-value="onPageChange"
       />
     </v-col>
   </v-row>
 </template>
 
 <script setup lang="ts">
-  import { useGoTo } from 'vuetify';
-
   import type { Protocol } from '@/types/protocol';
 
   import { useSortFilters } from '@/composables/useSortFilters';
   import { usePagination } from '@/composables/usePagination';
+  import { useGoToWrapper } from '@/composables/useGoToWrapper';
 
   import ProtocolCard from '@/components/protocol/ProtocolCard.vue';
-  import type { InternalGoToOptions } from 'vuetify/lib/composables/goto.mjs';
 
   defineProps<{
     protocolsList: Protocol[];
@@ -127,21 +125,12 @@
 
   const { sortFilters, toggleDialog } = useSortFilters();
   const { pagination, currentPage, handlePaginationChange } = usePagination();
+  const { goToWrapper } = useGoToWrapper();
 
-  const goTo = useGoTo();
-
-  // Scroll to the first error element using Vuetify's goTo
-  const goToOptions: Partial<Partial<InternalGoToOptions>> = {
-    duration: 200,
-    easing: 'easeInOutCubic',
-    offset: 0,
-  };
-
-  const onPagechange = (pageNumber: number) => {
-    // Scroll to the top
-    goTo('[data-id="results-header"]', goToOptions);
-
-    // Change pagination, triggering the refetch of the API and starts the isFetching state
+  const onPageChange = (pageNumber: number) => {
+    // Scroll to top of the page
+    goToWrapper(80);
+    // Change the pagination, which will create a new API call
     handlePaginationChange(pageNumber);
   };
 </script>

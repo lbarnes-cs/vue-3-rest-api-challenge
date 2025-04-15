@@ -5,8 +5,8 @@
     :items="protocolsList"
     :items-length="pagination?.total_results || 0"
     :loading="isFetching"
-    :page="pagination.current_page"
-    :items-per-page="pagination.page_size"
+    :page="currentPage"
+    :items-per-page="sortFilters.pageSize || 10"
     :sort-by="sortBy"
     :mobile="!mdAndUp"
     :density="mdAndUp ? 'default' : 'compact'"
@@ -14,8 +14,8 @@
     class="elevation-1"
     show-expand
     @update:options="handleOptionsUpdate"
-    @update:page="handlePaginationChange"
-    @update:items-per-page="handleItemsPerPage"
+    @update:page="onPageChange"
+    @update:items-per-page="onItemsPerPageChange"
   >
     <!-- Main Columns -->
     <template #[`item.id`]="{ item }: ProtocolItem">
@@ -97,6 +97,7 @@
   import { sortSearchFiltersDefault } from '@/constants/sortDefaults';
 
   import ProtocolExpandedRow from '@/components/protocol/ProtocolExpandedRow.vue';
+  import { useGoToWrapper } from '@/composables/useGoToWrapper';
 
   interface DataTableServerOptions {
     page: number;
@@ -120,7 +121,8 @@
   const { mdAndUp } = useDisplay();
 
   const { sortFilters, updateSortFilters, updatePageSize } = useSortFilters();
-  const { pagination, handlePaginationChange } = usePagination();
+  const { pagination, currentPage, handlePaginationChange } = usePagination();
+  const { goToWrapper } = useGoToWrapper();
 
   // This keeps track of which rows are expanded
   const expanded = ref<string[]>([]);
@@ -178,6 +180,9 @@
       // Update the previous sort tracking reference
       previousSortBy.value = [...newSort];
 
+      // This will trigger a new re-fetch, so let's scroll up
+      goToWrapper(80);
+
       updateSortFilters({
         orderField: newSort[0]?.key ?? sortSearchFiltersDefault.orderField,
         orderDir: newSort[0]?.order === 'desc' ? OrderDir.Desc : OrderDir.Asc,
@@ -186,8 +191,16 @@
     }
   };
 
-  const handleItemsPerPage = (itemsPerPage: number) => {
+  const onItemsPerPageChange = (itemsPerPage: number) => {
+    goToWrapper(80);
     updatePageSize(itemsPerPage);
+  };
+
+  const onPageChange = (pageNumber: number) => {
+    // Scroll to top of the page
+    goToWrapper(80);
+    // Change the pagination, which will create a new API call
+    handlePaginationChange(pageNumber);
   };
 
   // Note: we are using this twice, this might be a helper or composable
