@@ -3,7 +3,7 @@
     <template #header>
       <v-container>
         <v-row dense>
-          <v-col cols="8" class="bg-primary d-flex align-center gc-2">
+          <v-col cols="7" class="bg-primary d-flex align-center gc-2">
             <span class="text-subtitle-2 hidden-xs">View:</span>
             <v-tabs v-model="tab" bg-color="primary">
               <v-tab value="cards">Cards</v-tab>
@@ -11,7 +11,7 @@
             </v-tabs>
           </v-col>
 
-          <v-col cols="4" class="bg-primary d-flex align-center">
+          <v-col cols="5" class="bg-primary d-flex align-center">
             <v-fade-transition>
               <SearchInput :is-loading="isLoading" />
             </v-fade-transition>
