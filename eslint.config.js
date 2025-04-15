@@ -1,3 +1,4 @@
+// eslint.config.js
 import pluginJs from '@eslint/js';
 import eslintPluginPrettier from 'eslint-plugin-prettier/recommended';
 import pluginVue from 'eslint-plugin-vue';
@@ -16,7 +17,7 @@ export default [
   },
   { languageOptions: { globals: globals.browser } },
   pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
+  ...tseslint.configs.recommended, // Enable TypeScript rules
   ...pluginVue.configs['flat/recommended'],
   {
     files: ['**/*.vue'],
@@ -37,6 +38,10 @@ export default [
         },
       ],
       'eol-last': ['error', 'always'],
+      // Adding TypeScript-specific rules
+      '@typescript-eslint/explicit-module-boundary-types': 'off', // You can adjust this based on preference
+      '@typescript-eslint/no-explicit-any': 'warn', // Warn on any usage
+      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'], // Enforce interface over type
     },
   },
   {
