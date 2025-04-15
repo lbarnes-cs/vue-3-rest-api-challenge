@@ -1,8 +1,22 @@
-![Netlify Deployment Badge](https://api.netlify.com/api/v1/badges/eec789fa-0306-4471-b7b6-166706f0e001/deploy-status)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/eec789fa-0306-4471-b7b6-166706f0e001/deploy-status)](https://app.netlify.com/sites/lbarnes-labforward-challenge/deploys)
 
 # Labforward Frontend Challenge 🚀
 
 This is a Vue.js 3-based application built to interact with the Protocols.io API. It allows users to search, filter, and display protocol information efficiently with pagination and sorting features. The app uses modern tools and follows best practices to ensure smooth performance, security, and scalability.
+
+### 🚀 Live Demo
+
+**https://lbarnes-labforward-challenge.netlify.app/**
+
+## 📌 Highlights
+
+- ⚙️ Built with **Vue 3**, **TypeScript**, **Vite**, **Vue Query**, and **Vuetify**
+- 🔍 Search, sort, and paginate protocols via the **Protocols.io API v3**
+- 💡 Supports both **card** and **table** views for results
+- 🧪 **Unit tests automatically run on every push** via GitHub Actions
+- 🧵 Clean composable architecture: `useSearchTerm`, `useProtocols`, etc.
+- 🧩 Local storage to persist state and improve UX
+- 🛠️ ESLint v9 with Flat config and Prettier integration
 
 ---
 
@@ -164,4 +178,26 @@ Currently, the folder structure could be more modular and better organized. To e
 
 ## 🔧 Deployment
 
-The app is deployed to **Netlify**, with streamlined **CI/CD** to ensure smooth updates. Each pull request is tested in isolation before changes are deployed to production.
+The app is deployed to **Netlify**, with streamlined **CI/CD** to ensure smooth updates.
+
+- ✅ **Unit tests and linter checks** are automatically run on every push via **GitHub Actions**
+- 🚦 Pull requests are validated before they can be merged
+- 🌐 Production is updated automatically when changes are merged into the main branch
+
+This setup ensures the app is always in a reliable, tested state, with fast feedback loops during development.
+
+---
+
+## 💭 Reflections & Learnings
+
+This project was a great opportunity to explore:
+
+- Rapid iteration using a clean **Vue 3 + Vite** setup
+- **Type-safe API integration** using `@tanstack/vue-query`
+- Managing shared pagination and search state between multiple views
+- CI/CD with GitHub Actions and using **Left Hook** to enforce pre-commit checks
+- Optimizing bundle size — gzip is currently ~170 kB, but further improvements could reduce the initial JS payload
+
+I also took care to align closely with the **Protocols.io documentation**, ensuring the API was used effectively and minimizing potential bugs through strict typings.
+
+> Initially, I approached the `/protocols` endpoint as a way to list protocols freely, but I later realized the **searchKey is a required parameter**. To work around this early on, I defaulted to a predefined key. Eventually, I restructured the app to reflect its true nature as a search engine — leading to a cleaner experience where users land on a dedicated search screen and trigger queries themselves.
