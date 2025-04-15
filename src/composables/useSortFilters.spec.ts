@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { sortSearchFiltersDefault } from '@/constants/sortDefaults';
 import { nextTick } from 'vue';
+
+import { sortSearchFiltersDefault } from '@/constants/sortDefaults';
+import { OrderField } from '@/types/protocol/query';
 
 const mockResetPagination = vi.fn();
 
@@ -33,10 +35,12 @@ describe('useSortFilters', () => {
   });
 
   it('should update sort filters and call resetPagination', async () => {
-    const newFilters = { ...sortSearchFiltersDefault, orderField: 'new' };
+    const newFilters = {
+      ...sortSearchFiltersDefault,
+      orderField: OrderField.Name,
+    }; // Use a valid OrderField
 
     // Update the filters
-    console.log('fail here');
     sortFiltersComposable.updateSortFilters(newFilters);
 
     await nextTick();
