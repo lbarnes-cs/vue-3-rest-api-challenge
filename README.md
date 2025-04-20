@@ -11,6 +11,18 @@ This is a Vue.js 3-based application built to interact with the Protocols.io API
 
 **https://lbarnes-labforward-challenge.netlify.app/**
 
+> ## 📝 **Update after challenge submission:**
+>
+> Thanks to [PR #4](https://github.com/lbarnes-cs/labforward-challenge/pull/4), the project now includes a [GitHub Actions workflow for E2E tests](https://github.com/lbarnes-cs/labforward-challenge/blob/main/.github/workflows/e2e-test.yml) that automatically runs Playwright tests against the **Netlify preview environment** created for each pull request. This ensures that new changes are validated in a real-world deployment context before being merged.
+>
+> An example of a **failing PR** (both E2E and unit tests) can be seen in [PR #5](https://github.com/lbarnes-cs/labforward-challenge/pull/5), which demonstrates how this workflow helps catch regressions early.
+>
+> Separately, [PR #2](https://github.com/lbarnes-cs/labforward-challenge/pull/2) introduces automated checks for **Lint**, **Prettier**, and **Unit Tests** via GitHub Actions.
+>
+> ⚠️ Please note: Since this is a **private repo on a free GitHub plan**, we are **unable to block PR merges** based on failed checks — but the checks still run and surface feedback early in the workflow.
+
+---
+
 ## 📌 Highlights
 
 - ⚙️ Built with **Vue 3**, **TypeScript**, **Vite**, **Vue Query**, and **Vuetify**
