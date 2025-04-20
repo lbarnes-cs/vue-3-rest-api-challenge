@@ -1,0 +1,66 @@
+name: E2E Tests on Netlify Preview
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  e2e-tests:
+    runs-on: ubuntu-latest
+    env:
+      NETLIFY_SITE_NAME: lbarnes-labforward-challenge
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Construct Netlify Preview URL
+        id: preview
+        run: |
+          PR_NUMBER=${{ github.event.pull_request.number }}
+          PREVIEW_URL="https://deploy-preview-${PR_NUMBER}--${NETLIFY_SITE_NAME}.netlify.app"
+          echo "✅ Preview URL: $PREVIEW_URL"
+          echo "preview_url=$PREVIEW_URL" >> $GITHUB_ENV
+
+      - name: Wait for Netlify Preview to become available
+        run: |
+          echo "⏳ Waiting for Netlify preview to be available..."
+          for i in {1..30}; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.preview_url }}")
+            echo "Attempt $i: Status $status"
+            if [ "$status" -eq 200 ]; then
+              echo "✅ Netlify preview is ready!"
+              break
+            fi
+            sleep 5
+          done
+
+          # Fail if it's still not ready
+          final_status=$(curl -s -o /dev/null -w "%{http_code}" "${{ env.preview_url }}")
+          if [ "$final_status" -ne 200 ]; then
+            echo "❌ Timed out waiting for Netlify preview"
+            exit 1
+          fi
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      # Set the environment variable for the base URL
+      - name: Set E2E_BASE_URL
+        run: echo "E2E_BASE_URL=${{ env.preview_url }}" >> $GITHUB_ENV
+
+      - name: Run Playwright E2E Tests
+        run: pnpm exec playwright test
+        env:
+          BASE_URL: ${{ env.preview_url }}
