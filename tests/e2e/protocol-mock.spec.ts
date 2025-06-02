@@ -23,7 +23,7 @@ test.describe('Welcome Banner Tests', () => {
     await page.waitForSelector('[data-testid="protocol-card"]');
 
     const cards = page.locator('[data-testid="protocol-card"]');
-    await expect(cards).toHaveCount(10);
+    await expect(cards).toHaveCount(8); // changing the test to cause an error
 
     const firstCard = cards.first();
 

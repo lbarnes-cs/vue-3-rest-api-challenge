@@ -75,7 +75,7 @@ describe('ProtocolCards.vue', () => {
     expect(skeleton.isVisible()).toBe(true);
 
     const cardsResult = wrapper.find('[data-testid="cards-list"]');
-    expect(cardsResult.exists()).toBe(false);
+    expect(cardsResult.exists()).toBe(true); // changing the tests to cause an error
   });
 
   test('should not display any cards when list is empty', async () => {
