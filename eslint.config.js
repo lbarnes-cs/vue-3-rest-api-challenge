@@ -41,7 +41,7 @@ export default [
       // Adding TypeScript-specific rules
       '@typescript-eslint/explicit-module-boundary-types': 'off', // You can adjust this based on preference
       '@typescript-eslint/no-explicit-any': 'warn', // Warn on any usage
-      '@typescript-eslint/consistent-type-definitions': ['error', 'interface'], // Enforce interface over type
+      '@typescript-eslint/consistent-type-definitions': 'off', // We want to use type, not forced to interface
     },
   },
   {
