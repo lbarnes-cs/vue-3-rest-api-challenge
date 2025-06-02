@@ -19,10 +19,10 @@ export const vuetify = createVuetify({
     themes: {
       light: {
         colors: {
-          primary: '#002e5d', // Labforward primary blue
-          secondary: '#d50032', // Labforward primary red
-          accent: '#63A2BC', // Labforward secondary blue
-          brand: '#9d0226', // Labforward darker red
+          primary: '#002e5d',
+          secondary: '#d50032', 
+          accent: '#63A2BC',
+          brand: '#9d0226',
         },
       },
     },
