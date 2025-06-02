@@ -1,4 +1,4 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/eec789fa-0306-4471-b7b6-166706f0e001/deploy-status)](https://app.netlify.com/sites/lbarnes-coding-challenge/deploys) ![Vue](https://img.shields.io/badge/vue-3.x-brightgreen)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7cbd1bb9-5914-42e3-847d-689b91b1b58c/deploy-status)](https://app.netlify.com/projects/vue3-coding-challenge/deploys) ![Vue](https://img.shields.io/badge/vue-3.x-brightgreen)
 ![TypeScript](https://img.shields.io/badge/typescript-4.x-blue)
 ![Vite](https://img.shields.io/badge/vite-fast-purple)
 ![Vuetify](https://img.shields.io/badge/Vuetify-3.x-1867C0?logo=vuetify&logoColor=white) ![pnpm](https://img.shields.io/badge/pnpm-fast-F69220?logo=pnpm&logoColor=white) ![Playwright](https://img.shields.io/badge/playwright-testing-blue)
@@ -9,7 +9,7 @@ This is a Vue.js 3-based application built to interact with the Protocols.io API
 
 ### 🚀 Live Demo
 
-**https://lbarnes-coding-challenge.netlify.app/**
+**https://lbarnes-vue3-challenge.netlify.app/**
 
 ## 📌 Highlights
 
@@ -105,25 +105,25 @@ pnpm run tsc
 
 ### Search Screen
 
-<img src="https://lbarnes-vue-3-challenge.netlify.app/screenshots/mobile-welcome-screen.jpg" 
+<img src="https://lbarnes-vue3-challenge.netlify.app/screenshots/mobile-welcome-screen.jpg" 
      alt="Mobile welcome screen showing the search bar and intro text" 
      width="450"/>
 
 ### Desktop Views
 
-<img src="https://lbarnes-vue-3-challenge.netlify.app/screenshots/desktop-cards-loading.jpg" 
+<img src="https://lbarnes-vue3-challenge.netlify.app/screenshots/desktop-cards-loading.jpg" 
      alt="Desktop view showing loading state for protocol cards using skeleton UI" 
      width="600"/>
 
-<img src="https://lbarnes-vue-3-challenge.netlify.app/screenshots/desktop-table-view.jpg" 
+<img src="https://lbarnes-vue3-challenge.netlify.app/screenshots/desktop-table-view.jpg" 
      alt="Desktop view of protocol table with one row expanded to show additional details" 
      width="600"/>
 
 ### Mobile Views
 
-<img src="https://lbarnes-vue-3-challenge.netlify.app/screenshots/mobile-cards-view.jpg" 
+<img src="https://lbarnes-vue3-challenge.netlify.app/screenshots/mobile-cards-view.jpg" 
      alt="Mobile view displaying protocol search results in card layout" 
-     width="300"/><img src="https://lbarnes-vue-3-challenge.netlify.app/screenshots/mobile-table-view.jpg" 
+     width="300"/><img src="https://lbarnes-vue3-challenge.netlify.app/screenshots/mobile-table-view.jpg" 
      alt="Mobile view displaying protocol search results in table layout" 
      width="300"/>
 

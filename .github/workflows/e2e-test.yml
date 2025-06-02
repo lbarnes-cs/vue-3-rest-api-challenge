@@ -8,7 +8,7 @@ jobs:
   e2e-tests:
     runs-on: ubuntu-latest
     env:
-      NETLIFY_SITE_NAME: lbarnes-labforward-challenge
+      NETLIFY_SITE_NAME: lbarnes-vue3-challenge
 
     steps:
       - name: Checkout code
